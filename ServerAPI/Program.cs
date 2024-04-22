@@ -1,4 +1,6 @@
-﻿namespace ServerAPI;
+﻿using ServerAPI.Repositories;
+namespace ServerAPI;
+
 
 public class Program
 {
@@ -8,6 +10,7 @@ public class Program
 
         // Add services to the container.
 
+        builder.Services.AddSingleton<ILoginRepository, LoginRepository>();
         builder.Services.AddControllers();
 
         var app = builder.Build();
