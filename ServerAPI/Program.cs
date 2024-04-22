@@ -1,4 +1,5 @@
-﻿namespace ServerAPI;
+﻿using ServerAPI.Repositories;
+namespace ServerAPI;
 
 public class Program
 {
@@ -7,6 +8,19 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+
+        builder.Services.AddSingleton<IListingRepository, ListingRepository>();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("policy",
+                              policy =>
+                              {
+                                  policy.AllowAnyOrigin();
+                                  policy.AllowAnyMethod();
+                                  policy.AllowAnyHeader();
+                              });
+        });
 
         builder.Services.AddControllers();
 
@@ -18,6 +32,7 @@ public class Program
 
         app.UseAuthorization();
 
+        app.UseCors("policy");
 
         app.MapControllers();
 
