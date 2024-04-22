@@ -18,8 +18,6 @@ public class LoginController : ControllerBase
         [HttpGet("login")]
         public IActionResult Login([FromQuery] string username, [FromQuery] string password)
         {
-            Console.WriteLine(username);
-            Console.WriteLine(password);
             if (_loginRepository.Verify(username, password))
             {
                 return Ok(new { Message = "Login successful" });
