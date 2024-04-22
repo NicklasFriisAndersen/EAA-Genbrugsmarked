@@ -21,4 +21,6 @@ public class Listing
     public Location Location { get; set; }
     
     public User User { get; set; }
+
 }
+
