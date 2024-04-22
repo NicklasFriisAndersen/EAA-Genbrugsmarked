@@ -8,7 +8,7 @@ public class LoginRepository : ILoginRepository
     // Assuming you have a way to access your database here
     private readonly IMongoCollection<User> _users;
 
-    public LoginRepository(IMongoCollection<User> usersCollection)
+    public LoginRepository()
     {
         _users = usersCollection;
     }
@@ -21,14 +21,13 @@ public class LoginRepository : ILoginRepository
 
     public bool Verify(string username, string password)
     {
-        // Get the user by username
         var user = GetUserByUserName(username);
         if (user != null)
         {
-            // Here, you should compare the provided password with the one stored in the database
-            // Make sure to hash the password before comparison if you're storing hashed passwords
-            // For example: return BCrypt.Net.BCrypt.Verify(password, user.Password);
+            // Directly comparing plaintext passwords
+            return user.Password == password;
         }
         return false;
     }
+
 }
