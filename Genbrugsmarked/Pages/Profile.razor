@@ -18,4 +18,15 @@
 </table>
 @code {
     
+    public async void UpdateLocalStorage()
+    {
+        await localStore.SetItemAsync(todoKey, todos);
+    }
+        
+    public async void ClearLocalStorage()
+    {
+        //todos.Clear();
+        await localStore.RemoveItemAsync(todoKey);
+    }
+    
 }
