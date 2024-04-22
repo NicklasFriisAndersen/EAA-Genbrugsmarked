@@ -9,7 +9,7 @@ namespace ServerAPI.Repositories
 	{
 		private User testuser = new User()
 		{
-			//UserID = "1",
+			UserID = ObjectId.GenerateNewId(),
 			Username = "testbruger1",
 			Password = "1234567",
 			Email = "test@gmail.com",
