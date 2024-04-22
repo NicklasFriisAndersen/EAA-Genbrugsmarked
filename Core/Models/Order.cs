@@ -4,7 +4,7 @@ namespace Core.Models;
 
 public class Order
 {
-    public ObjectId OrderID { get; set; }
+    public ObjectId Id { get; set; }
     
     public DateTime OrderDate { get; set; }
     

@@ -4,7 +4,7 @@ namespace Core.Models;
 
 public class Listing
 {
-    public ObjectId ListingID { get; set; }
+    public ObjectId Id { get; set; }
     
     public string Title { get; set; }
     

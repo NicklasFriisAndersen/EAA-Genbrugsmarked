@@ -4,7 +4,7 @@ namespace Core.Models;
 
 public class User
 {
-    public ObjectId UserID { get; set; }
+    public ObjectId Id { get; set; }
     
     public string Username { get; set; }
     

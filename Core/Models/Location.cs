@@ -4,7 +4,7 @@ namespace Core.Models;
 
 public class Location
 {
-    public ObjectId LocationID { get; set; }
+    public ObjectId Id { get; set; }
     
     public string Name { get; set; }
     
