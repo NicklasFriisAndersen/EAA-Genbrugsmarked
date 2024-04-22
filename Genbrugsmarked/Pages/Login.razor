@@ -1,6 +1,25 @@
 @page "/login"
+@using System.Reflection.Emit
+@using System.Reflection.Metadata
+@using Amazon.Runtime.Internal.Settings
+@using Core.Models
+@using MongoDB.Driver.Core.Authentication
 <h3>Login</h3>
 
+<div class="col-md-6 mb-3">
+        <label for="Name">Brugernavn</label>
+        <InputText id="Name" placeHolder="Indtast brugernavn..." @bind-Value = "User.Username"  class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="password">Password</label>
+        <InputText type="password" placeholder="Indtast password..." @bind-Value = "User.Password" id="password" class="form-control" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+
 @code {
-    
+    private User User = new User();
 }
