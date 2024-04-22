@@ -15,9 +15,6 @@
     <None Remove="Repositories\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="MongoDB.Bson" Version="2.25.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
   </ItemGroup>
