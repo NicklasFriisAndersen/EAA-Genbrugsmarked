@@ -1,25 +1,46 @@
-@page "/login"
+@inject NavigationManager NavigationManager
 @using System.Reflection.Emit
 @using System.Reflection.Metadata
 @using Amazon.Runtime.Internal.Settings
 @using Core.Models
 @using MongoDB.Driver.Core.Authentication
+@page "/login"
+@inject HttpClient Http
+@using Core.Models
+
 <h3>Login</h3>
 
-<div class="col-md-6 mb-3">
-        <label for="Name">Brugernavn</label>
-        <InputText id="Name" placeHolder="Indtast brugernavn..." @bind-Value = "User.Username"  class="form-control" />
+<EditForm Model="user" OnValidSubmit="HandleLogin">
+    <div class="col-md-6 mb-3">
+        <label for="username">Brugernavn</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
         <label for="password">Password</label>
-        <InputText type="password" placeholder="Indtast password..." @bind-Value = "User.Password" id="password" class="form-control" />
+        <InputText type="password" @bind-Value="user.Password" id="password" class="form-control" />
     </div>
 
     <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Login</button>
     </div>
-
+</EditForm>
 
 @code {
-    private User User = new User();
+    private User user = new User();
+
+    private async Task HandleLogin()
+    {
+        var response = await Http.PostAsJsonAsync("api/login/login", user);
+        if (response.IsSuccessStatusCode)
+        {
+            // Use the injected NavigationManager to navigate
+            NavigationManager.NavigateTo("/profile");
+        }
+        else
+        {
+            // Handle failure, such as displaying an error message
+            Console.WriteLine("Login failed"); // Add appropriate error handling
+        }
+    }
 }
+

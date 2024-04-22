@@ -7,10 +7,20 @@ public class LoginRepository : ILoginRepository
 {
     // Assuming you have a way to access your database here
     private readonly IMongoCollection<User> _users;
+    private string connectionString = "mongodb+srv://gruppe3mini:gruppe3projekt@genbrugshjemmeside.l92667j.mongodb.net/?retryWrites=true&w=majority&appName=Genbrugshjemmeside";
 
+    IMongoClient mongoClient;
+
+    IMongoDatabase database;
+
+    IMongoCollection<User> collection;
     public LoginRepository()
     {
-        _users = usersCollection;
+        mongoClient = new MongoClient(connectionString);
+
+        database = mongoClient.GetDatabase("Genbrugsmarked");
+
+        collection = database.GetCollection<User>("User");
     }
 
     public User GetUserByUserName(string username)

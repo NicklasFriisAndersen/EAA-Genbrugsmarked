@@ -15,12 +15,11 @@ public class LoginController : ControllerBase
             _loginRepository = loginRepository;
         }
 
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] User user)
+        [HttpGet("login")]
+        public IActionResult Login([FromQuery] string username, [FromQuery] string password)
         {
-            if (_loginRepository.Verify(user.Username, user.Password))
+            if (_loginRepository.Verify(username, password))
             {
-                // Authentication logic here
                 return Ok(new { Message = "Login successful" });
             }
             else
@@ -28,5 +27,6 @@ public class LoginController : ControllerBase
                 return Unauthorized(new { Message = "Login failed" });
             }
         }
+
     }
 
