@@ -1,46 +1,49 @@
-@inject NavigationManager NavigationManager
-@using System.Reflection.Emit
-@using System.Reflection.Metadata
-@using Amazon.Runtime.Internal.Settings
-@using Core.Models
-@using MongoDB.Driver.Core.Authentication
 @page "/login"
-@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
 @using Core.Models
+@using System.Net.Http
+@using System.Net
 
 <h3>Login</h3>
 
-<EditForm Model="user" OnValidSubmit="HandleLogin">
-    <div class="col-md-6 mb-3">
-        <label for="username">Brugernavn</label>
-        <InputText id="username" @bind-Value="user.Username" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="password">Password</label>
-        <InputText type="password" @bind-Value="user.Password" id="password" class="form-control" />
-    </div>
+<div class="col-md-6 mb-3">
+    <label for="username">Brugernavn</label>
+    <input id="username" @bind="username" class="form-control" />
+</div>
+<div class="col-md-6 mb-3">
+    <label for="password">Password</label>
+    <input type="password" @bind="password" id="password" class="form-control" />
+</div>
 
-    <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Login</button>
-    </div>
-</EditForm>
+<div class="col-12 mb-3">
+    <button type="button" class="btn btn-primary" @onclick="HandleLogin">Login</button>
+</div>
 
 @code {
-    private User user = new User();
+    private string username;
+    private string password;
 
     private async Task HandleLogin()
     {
-        var response = await Http.PostAsJsonAsync("api/login/login", user);
+        // Construct the login URL with query string parameters
+        var queryString = $"?username={username}&password={password}";
+        var loginUrl = $"api/login/login{queryString}";
+
+        // Perform GET request
+        var response = await HttpClient.GetAsync(loginUrl);
+
         if (response.IsSuccessStatusCode)
         {
-            // Use the injected NavigationManager to navigate
+            // Redirect to profile page upon successful login
             NavigationManager.NavigateTo("/profile");
         }
         else
         {
-            // Handle failure, such as displaying an error message
-            Console.WriteLine("Login failed"); // Add appropriate error handling
+            // Display error message or handle failed login
+            Console.WriteLine("Login failed");
         }
     }
 }
+
 

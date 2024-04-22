@@ -20,8 +20,9 @@ public class LoginRepository : ILoginRepository
 
         database = mongoClient.GetDatabase("Genbrugsmarked");
 
-        collection = database.GetCollection<User>("User");
+        _users = database.GetCollection<User>("User");
     }
+
 
     public User GetUserByUserName(string username)
     {
