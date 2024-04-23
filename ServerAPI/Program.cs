@@ -11,6 +11,8 @@ public class Program
 
         builder.Services.AddSingleton<IListingRepository, ListingRepository>();
 
+        builder.Services.AddSingleton<ILoginRepository, LoginRepository>();
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("policy",

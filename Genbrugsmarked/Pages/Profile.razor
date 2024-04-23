@@ -1,4 +1,5 @@
 @page "/profile"
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 @using Core.Models
 @using Blazored.LocalStorage
 <PageTitle>Profil</PageTitle>
@@ -19,17 +20,6 @@
     </thead>
 </table>
 @code {
-    /*
-    public async void UpdateLocalStorage()
-    {
-        await localStore.SetItemAsync(todoKey, todos);
-    }
-        
-    public async void ClearLocalStorage()
-    {
-        //todos.Clear();
-        await localStore.RemoveItemAsync(todoKey);
-    }
-    */
+
     
 }

@@ -1,0 +1,60 @@
+@page "/login"
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject HttpClient HttpClient
+@using Core.Models
+@using System.Net.Http
+@using System.Net
+@using System.Text.Json
+@using MongoDB.Bson
+@using MongoDB.Bson.Serialization
+
+<h3>Login</h3>
+
+<div class="col-md-6 mb-3">
+    <label for="username">Brugernavn</label>
+    <input id="username" @bind="username" class="form-control" />
+</div>
+<div class="col-md-6 mb-3">
+    <label for="password">Password</label>
+    <input type="password" @bind="password" id="password" class="form-control" />
+</div>
+
+<div class="col-12 mb-3">
+    <button type="button" class="btn btn-primary" @onclick="HandleLogin">Login</button>
+</div>
+
+@code {
+    private string username;
+    private string password;
+
+    private async Task HandleLogin()
+    {
+        // Construct the login URL with query string parameters
+        var queryString = $"?username={username}&password={password}";
+        var loginUrl = $"api/login/login{queryString}";
+
+        // Perform GET request
+        var response = await HttpClient.GetAsync(loginUrl);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Redirect to profile page upon successful login
+            NavigationManager.NavigateTo("/profile");
+            string responseJson = await response.Content.ReadAsStringAsync();
+            //User? user = JsonSerializer.Deserialize<User>(responseJson);
+            User? user = BsonSerializer.Deserialize<User>(responseJson);
+            Console.WriteLine(responseJson);            
+            
+                await localStore.SetItemAsync("userinfo", user);
+            
+        }
+        else
+        {
+            // Display error message or handle failed login
+            Console.WriteLine("Login failed");
+        }
+    }
+}
+
+
