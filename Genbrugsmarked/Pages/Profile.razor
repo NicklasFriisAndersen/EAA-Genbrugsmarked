@@ -1,12 +1,24 @@
 @page "/profile"
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 @using Core.Models
-@using Blazored.LocalStorage
-<PageTitle>Profil</PageTitle>
+@using System.Text.Json
 
-<h1>Min profil</h1>
-<p>Alexander123</p>
-<p>Alexandermail@gmail.com</p>
+<PageTitle>Profile</PageTitle>
+
+<h1>My Profile</h1>
+@if (user != null)
+{
+    <p id="name-of-user">Username: @user.Username</p>
+    <p id="email-of-user">Email: @user.Email</p>
+    @if (user.Role == "Admin")
+    {
+        <p id="role-display-if-admin">Special Role: @user.Role</p>
+    }
+}
+else
+{
+    <p>Please log in to view your profile.</p>
+}
 
 <table class="table table-striped">
     <thead>
@@ -19,7 +31,16 @@
         </tr>
     </thead>
 </table>
-@code {
 
-    
+@code {
+    private User? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
+        if (!string.IsNullOrEmpty(userInfoJson))
+        {
+            user = JsonSerializer.Deserialize<User>(userInfoJson);
+        }
+    }
 }
