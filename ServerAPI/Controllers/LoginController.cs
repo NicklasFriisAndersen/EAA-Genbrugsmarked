@@ -1,5 +1,6 @@
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using ServerAPI.Repositories;
 
 namespace ServerAPI.Controllers;
@@ -20,11 +21,13 @@ public class LoginController : ControllerBase
         {
             if (_loginRepository.Verify(username, password))
             {
-                return Ok(new { Message = "Login successful" });
+               // return Ok(new { Message = "Login successful" });
+                var user = _loginRepository.GetUserByUserName(username);
+                return Ok(user.ToJson());
             }
             else
             {
-                return Unauthorized(new { Message = "Login failed" });
+                return Unauthorized(new { Message = "woop woomp" });
             }
         }
 

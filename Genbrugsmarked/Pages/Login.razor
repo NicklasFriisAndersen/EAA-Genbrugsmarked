@@ -1,9 +1,13 @@
 @page "/login"
 @inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 @inject HttpClient HttpClient
 @using Core.Models
 @using System.Net.Http
 @using System.Net
+@using System.Text.Json
+@using MongoDB.Bson
+@using MongoDB.Bson.Serialization
 
 <h3>Login</h3>
 
@@ -37,6 +41,13 @@
         {
             // Redirect to profile page upon successful login
             NavigationManager.NavigateTo("/profile");
+            string responseJson = await response.Content.ReadAsStringAsync();
+            //User? user = JsonSerializer.Deserialize<User>(responseJson);
+            User? user = BsonSerializer.Deserialize<User>(responseJson);
+            Console.WriteLine(responseJson);            
+            
+                await localStore.SetItemAsync("userinfo", user);
+            
         }
         else
         {

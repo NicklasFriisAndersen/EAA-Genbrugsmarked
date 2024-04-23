@@ -1,10 +1,13 @@
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Core.Models;
 
 public class User
 {
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
 
     public string Username { get; set; } = "";
 
