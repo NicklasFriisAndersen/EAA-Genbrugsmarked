@@ -1,9 +1,33 @@
-@page "/createlisting"
+@page "/listing"
 @using Core.Models;
-@inject NavigationManager navigationManager
 @inject HttpClient Http;
+@inject NavigationManager navigationManager
 
-<h3>Orders</h3>
+<h3>Listings</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in listingList ?? new Listing[0])
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
+
+<ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
 
 <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -35,21 +59,30 @@
     </div>
 </EditForm>
 
-@code {
-    private EditContext? aEditContext;
+</ModalDialog>
 
+@code {
+    private Listing[]? listingList = new Listing[0];
     private string serverUrl = "https://localhost:7231";
+
+    protected override async Task OnInitializedAsync()
+    {
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+    }
 
     private Listing listingItem = new Listing();
 
-    protected override async Task OnInitializedAsync()
+    private EditContext? aEditContext;
+
+    protected override void OnInitialized()
     {
         aEditContext = new EditContext(listingItem);
     }
 
     public async Task HandleValidSubmit()
     {
-            await AddListingItem(); 
+        await AddListingItem();
+        addDialog.Close();
     }
 
     private async Task AddListingItem()
@@ -58,4 +91,7 @@
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
         listingItem = new(); // clear fields in form
     }
+
+    private ModalDialog? addDialog { get; set; }
+
 }
