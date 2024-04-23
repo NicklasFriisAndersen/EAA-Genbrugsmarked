@@ -1,0 +1,52 @@
+@page "/createprofile"
+@using Core.Models;
+@inject NavigationManager navigationManager
+@inject HttpClient Http;
+
+<h3>Orders</h3>
+
+<EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-12 mb-3">
+        <label for="Username">Username</label>
+        <InputText id="Username" @bind-Value="userItem.Username" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Password">Password</label>
+        <InputText id="Password" @bind-Value="userItem.Password" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Email">Email</label>
+        <InputText id="Email" @bind-Value="userItem.Email" class="form-control" />
+    </div>
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Create Profile</button>
+    </div>
+</EditForm>
+
+@code {
+    private EditContext? aEditContext;
+
+    private string serverUrl = "https://localhost:7231";
+
+    private User userItem = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        aEditContext = new EditContext(userItem);
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        await AddListingItem();
+    }
+
+    private async Task AddListingItem()
+    {
+        await Http.PostAsJsonAsync<User>($"{serverUrl}/api/user/add", userItem);
+        Console.WriteLine("Klient: add " + userItem.Username + " " + userItem.Email);
+        userItem = new(); // clear fields in form
+    }
+}
