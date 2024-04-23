@@ -83,6 +83,8 @@
     {
         await AddListingItem();
         addDialog.Close();
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+
     }
 
     private async Task AddListingItem()
