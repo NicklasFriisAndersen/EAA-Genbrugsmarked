@@ -1,0 +1,65 @@
+@page "/createlisting"
+@using Core.Models;
+@inject NavigationManager navigationManager
+@inject HttpClient Http;
+
+<h3>Orders</h3>
+
+<EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-md-12 mb-3">
+        <label for="Title">Title</label>
+        <InputText id="Title" @bind-Value="listingItem.Title" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Price">Price</label>
+        <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="Description">Description</label>
+        <InputNumber id="Description" @bind-Value="listingItem.Description" class="form-control" />
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <label for="Description">Description</label>
+        <InputTextArea id="Description1" @bind-Value="listingItem.Description" class="form-control" />
+    </div>
+    @*<div class="col-md-6 mb-3">
+        <div class="form-check">
+            <InputCheckbox id="Done" @bind-Value="listingItem" class="form-check-input" />
+            <label class="form-check-label" for="Done">
+                Is Done
+            </label>
+        </div>
+    </div>*@
+
+    <div class="col-12 mb-3">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+</EditForm>
+
+@code {
+    private EditContext? aEditContext;
+
+    private string serverUrl = "https://localhost:7231";
+
+    private Listing listingItem = new Listing();
+
+    protected override async Task OnInitializedAsync()
+    {
+        aEditContext = new EditContext(listingItem);
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        await AddListingItem();
+    }
+
+    private async Task AddListingItem()
+    {
+        await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
+        listingItem = new(); // clear fields in form
+    }
+
+}
