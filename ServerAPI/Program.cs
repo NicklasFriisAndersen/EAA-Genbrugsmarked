@@ -10,6 +10,8 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddSingleton<IListingRepository, ListingRepository>();
+        builder.Services.AddSingleton<IUserRepository, UserRepository>();
+
 
         builder.Services.AddCors(options =>
         {

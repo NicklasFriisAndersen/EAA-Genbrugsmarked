@@ -1,4 +1,4 @@
-@page "/createlisting"
+@page "/createprofile"
 @using Core.Models;
 @inject NavigationManager navigationManager
 @inject HttpClient Http;
@@ -9,29 +9,20 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="col-md-12 mb-3">
-        <label for="Title">Title</label>
-        <InputText id="Title" @bind-Value="listingItem.Title" class="form-control" />
+        <label for="Username">Username</label>
+        <InputText id="Username" @bind-Value="userItem.Username" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
-        <label for="Price">Price</label>
-        <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control" />
+        <label for="Password">Password</label>
+        <InputText id="Password" @bind-Value="userItem.Password" class="form-control" />
     </div>
     <div class="col-md-6 mb-3">
-        <label for="Status">Status</label>
-        <InputText id="Status" @bind-Value="listingItem.Status" class="form-control" />
+        <label for="Email">Email</label>
+        <InputText id="Email" @bind-Value="userItem.Email" class="form-control" />
     </div>
-    <div class="col-md-12 mb-3">
-        <label for="Description">Description</label>
-        <InputText id="Description" @bind-Value="listingItem.Description" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="Category">Category</label>
-        <InputText id="Category" @bind-Value="listingItem.Category" class="form-control" />
-    </div>
-
 
     <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary">Create Profile</button>
     </div>
 </EditForm>
 
@@ -40,22 +31,22 @@
 
     private string serverUrl = "https://localhost:7231";
 
-    private Listing listingItem = new Listing();
+    private User userItem = new User();
 
     protected override async Task OnInitializedAsync()
     {
-        aEditContext = new EditContext(listingItem);
+        aEditContext = new EditContext(userItem);
     }
 
     public async Task HandleValidSubmit()
     {
-            await AddListingItem(); 
+        await AddListingItem();
     }
 
     private async Task AddListingItem()
     {
-        await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
-        Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
-        listingItem = new(); // clear fields in form
+        await Http.PostAsJsonAsync<User>($"{serverUrl}/api/user/add", userItem);
+        Console.WriteLine("Klient: add " + userItem.Username + " " + userItem.Email);
+        userItem = new(); // clear fields in form
     }
 }
