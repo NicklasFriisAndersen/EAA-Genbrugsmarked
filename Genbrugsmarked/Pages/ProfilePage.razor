@@ -1,5 +1,6 @@
 @page "/profile"
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject HttpClient Http
 @using Core.Models
 @using System.Text.Json
 
@@ -10,10 +11,13 @@
 {
     <p id="name-of-user">Username: @user.Username</p>
     <p id="email-of-user">Email: @user.Email</p>
-    @if (user.Role == "Admin")
+    if (user.Role == "Admin")
     {
         <p id="role-display-if-admin">Special Role: @user.Role</p>
     }
+    <div class="col-12 mb-3">
+        <button class="btn btn-primary" @onclick="FilterByUserId">Søg</button>
+    </div>
 }
 else
 {
@@ -23,17 +27,32 @@ else
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">Egne annoncer</th>
-            <th scope="col">Vare</th>
-            <th scope="col">Pris</th>
-            <th scope="col">Status</th>
-            <th scope="col">Slet</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
+    <tbody>
+        @foreach (var item in listingList ?? new Listing[0])
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+                <td><button @onclick="() => EditItem(item)">Edit</button></td>
+                <td><button @onclick="() => DeleteListing()">Delete</button></td>
+
+            </tr>
+        }
+    </tbody>
 </table>
 
 @code {
     private User? user;
+    private Listing[]? listingList = new Listing[0];
+    private string serverUrl = "https://localhost:7231";
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,5 +61,28 @@ else
         {
             user = JsonSerializer.Deserialize<User>(userInfoJson);
         }
+
+        //string test = "nicklas";
+        //var url = $"{serverUrl}/api/listing/getbyusername?username={test}";
+        //listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        //StateHasChanged();
+        Console.WriteLine(user.Username);
+    }
+
+    private async Task FilterByUserId()
+    {
+        var url = $"{serverUrl}/api/listing/getbyuserid?userId={user.Id}";
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        StateHasChanged();
+    }
+
+    private async Task EditItem(Listing item)
+    {
+        // Logic to edit the item
+    }
+
+    private void DeleteListing()
+    {
+        Console.WriteLine("slettet");
     }
 }

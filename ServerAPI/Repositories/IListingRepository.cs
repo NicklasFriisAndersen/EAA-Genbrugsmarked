@@ -11,6 +11,9 @@ namespace ServerAPI.Repositories
         public List<Listing> getAllItems();
 
         public List<Listing> SortListingsByCategory(string cname);
-	}
+
+        public List<Listing> SortListingsByUserId(string userId);
+
+    }
 }
 
