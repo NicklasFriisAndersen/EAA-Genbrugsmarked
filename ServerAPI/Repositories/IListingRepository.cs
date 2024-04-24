@@ -11,6 +11,8 @@ namespace ServerAPI.Repositories
         public List<Listing> getAllItems();
 
         public List<Listing> SortListingsByCategory(string cname);
+        
+        public List<Location> SortListingsByLocation(string lname);
 	}
 }
 

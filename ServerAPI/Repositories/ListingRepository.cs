@@ -14,6 +14,9 @@ namespace ServerAPI.Repositories
         IMongoDatabase database;
 
         IMongoCollection<Listing> collection;
+        
+        IMongoCollection<Location> locationCollection;
+       
 
 
         public ListingRepository()
@@ -23,6 +26,7 @@ namespace ServerAPI.Repositories
             database = mongoClient.GetDatabase("Genbrugsmarked");
 
             collection = database.GetCollection<Listing>("Listing");
+            locationCollection = database.GetCollection<Location>("Location");
         }
 
         public void insertOneListing(Listing listing)
@@ -40,6 +44,10 @@ namespace ServerAPI.Repositories
         public List<Listing> SortListingsByCategory(string cname)
         {   
             return collection.Find<Listing>(item => item.Category.Equals(cname,StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        public List<Location> SortListingsByLocation(string lname)
+        {
+            return locationCollection.Find<Location>(location => location.Name.Equals(lname, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
 }

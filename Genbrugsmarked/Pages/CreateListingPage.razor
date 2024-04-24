@@ -172,7 +172,7 @@
 
     private async Task FilterByLocation()
     {
-        var url = $"{serverUrl}/api/location/getbyfilter?location={selectedLocation}";
+        var url = $"{serverUrl}/api/listing/getbylocation?location={selectedLocation}";
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
     }

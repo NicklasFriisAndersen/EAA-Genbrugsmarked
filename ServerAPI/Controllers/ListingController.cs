@@ -38,6 +38,16 @@ namespace ServerAPI.Controllers
             return lRepo.SortListingsByCategory(category);
         }
 
+
+        [HttpGet]
+        [Route("getbylocation")]
+        
+        public IEnumerable<Location> GetLocations([FromQuery] string location)
+        {
+            return lRepo.SortListingsByLocation(location);
+        }
+            
+        
     }
 }
 
