@@ -42,8 +42,7 @@ else
                 <td>@item.Price</td>
                 <td>@item.Description</td>
                 <td><button @onclick="() => EditItem(item)">Edit</button></td>
-                <td><button @onclick="() => DeleteListing()">Delete</button></td>
-
+                <td><button @onclick="() => DeleteListing(item)">Delete</button></td>
             </tr>
         }
     </tbody>
@@ -81,8 +80,23 @@ else
         // Logic to edit the item
     }
 
-    private void DeleteListing()
+    private async Task DeleteListing(Listing listing)
     {
-        Console.WriteLine("slettet");
+        //var url = $"{serverUrl}/api/listing/deletebyid?listingId={listing.Title}";
+        await Http.DeleteAsync($"{serverUrl}/api/listing/deletebyid?listingId={listing.Id}");
+        StateHasChanged();
+        await FilterByUserId();
+    }
+
+
+
+    //private async Task AddListingItem()
+    //{
+    //    listingItem.User = user;
+    //    listingItem.DatePosted = DateTime.Now;
+    //    listingItem.Location = _locations[_selectedLocationIndex];
+    //    await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
+    //    Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
+    //    listingItem = new(); // clear fields in form
     }
 }
