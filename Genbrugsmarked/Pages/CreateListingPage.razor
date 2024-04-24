@@ -13,6 +13,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Description</th>
+        <th>Date Posted</th>
     </tr>
     </thead>
     <tbody>
@@ -22,6 +23,7 @@
             <td>@item.Title</td>
             <td>@item.Price</td>
             <td>@item.Description</td>
+            <td>@item.DatePosted.DayOfWeek</td>
         </tr>
     }
     </tbody>
@@ -117,6 +119,7 @@
     private async Task AddListingItem()
     {
         listingItem.User = user;
+        listingItem.DatePosted = DateTime.Now;
         listingItem.Location = _locations[_selectedLocationIndex];
         await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
