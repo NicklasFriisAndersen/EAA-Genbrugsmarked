@@ -56,13 +56,51 @@
             <td>@item.Description</td>
             <td>@item.DatePosted.DayOfWeek</td>
             <td>@item.Category</td>
-            <td><button>Purchase</button></td>
+            <td><button class="btn btn-primary" @onclick="() => OpenPurchaseDialog(item)">Purchase</button></td>
         </tr>
     }
     </tbody>
 </table>
 
 <button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
+
+<!-- Purchase Modal Dialog -->
+<ModalDialog @ref="@purchaseDialog" Title="Confirm Purchase">
+    <div class="row p-3">
+        <div class="col-md-12 mb-3">
+                    <strong>Title:</strong>
+                    <p>@currentListing?.Title</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Price:</strong>
+                    <p>@currentListing?.Price.ToString("C")</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Description:</strong>
+                    <p>@currentListing?.Description</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Date Posted:</strong>
+                    <p>@currentListing?.DatePosted.ToString("yyyy-MM-dd")</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Category:</strong>
+                    <p>@currentListing?.Category</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Status:</strong>
+                    <p>@currentListing?.Status</p>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <strong>Location:</strong>
+                    <p>@currentListing?.Location?.Name</p>
+                </div>
+        <div class="col-12 mb-3">
+            <button class="btn btn-success" @onclick="ConfirmPurchase">Confirm My Purchase</button>
+            <button class="btn btn-secondary" @onclick="() => purchaseDialog.Close()">Cancel</button>
+        </div>
+    </div>
+</ModalDialog>
 
 <ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
 
@@ -130,6 +168,13 @@
 
     private Listing listingItem = new Listing();
 
+    private Order orderItem = new Order();
+
+
+    private Listing? currentListing;
+
+    private ModalDialog? purchaseDialog;
+
     private EditContext? aEditContext;
 
     private List<Location> _locations = new();
@@ -180,5 +225,50 @@
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
     }
+
+    private void OpenPurchaseDialog(Listing listing)
+    {
+        currentListing = listing;
+        purchaseDialog.Open();
+    }
+
+    private async Task ConfirmPurchase()
+    {
+        Console.WriteLine(currentListing.Title);
+        orderItem.User = user;
+        orderItem.Listings = currentListing;
+        orderItem.OrderDate = DateTime.Now;
+
+        await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
+        Console.WriteLine();
+    }
+
+    //private async Task ConfirmPurchase()
+    //{
+    //    var order = new Order
+    //    {
+    //        User = user,
+    //        Listings = new List<Listing> { currentListing },
+    //        OrderDate = DateTime.UtcNow
+    //    };
+    //    Console.WriteLine("Order data being sent:", JsonSerializer.Serialize(order));
+
+    //    var response = await Http.PostAsJsonAsync($"{serverUrl}/api/order/add", order);
+
+    //    if (response.IsSuccessStatusCode)
+    //    {
+    //        Console.WriteLine("Order successfully placed");
+    //        purchaseDialog.Close();
+    //        // Optionally, refresh the orders list or navigate the user
+    //        navigationManager.NavigateTo("/orders");
+
+
+
+    //    }
+    //    else
+    //    {
+    //        Console.WriteLine("Failed to place order");
+    //    }
+    //}
 
 }

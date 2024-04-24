@@ -19,7 +19,7 @@
     @foreach (var item in Orderlist ?? new Order[0])
     {
         <tr>
-            <td>@item.User.Username</td>
+            <td>@item.Listings.User.Username</td>
             <td>@item.OrderDate</td>
             <td>@item.Listings</td>
             
