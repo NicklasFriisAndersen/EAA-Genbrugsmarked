@@ -38,6 +38,12 @@ namespace ServerAPI.Controllers
             return lRepo.SortListingsByCategory(category);
         }
 
+        [HttpGet]
+        [Route("getbyuserid")]
+        public IEnumerable<Listing> GetAllByUserId([FromQuery] string userId)
+        {
+            return lRepo.SortListingsByUserId(userId);
+        }
+
     }
 }
-
