@@ -31,6 +31,13 @@ namespace ServerAPI.Controllers
             return lRepo.getAllItems();
         }
 
+        [HttpGet]
+        [Route("getbyfilter")]
+        public IEnumerable<Listing> GetAll([FromQuery] string category)
+        {
+            return lRepo.SortListingsByCategory(category);
+        }
+
     }
 }
 

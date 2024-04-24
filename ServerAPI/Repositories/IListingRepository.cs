@@ -9,6 +9,8 @@ namespace ServerAPI.Repositories
         public void insertOneListing(Listing listing);
 
         public List<Listing> getAllItems();
-    }
+
+        public List<Listing> SortListingsByCategory(string cname);
+	}
 }
 
