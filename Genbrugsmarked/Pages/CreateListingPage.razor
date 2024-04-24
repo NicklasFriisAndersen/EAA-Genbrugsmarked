@@ -1,27 +1,31 @@
 @page "/listing"
 @using Core.Models;
+@using System.Text.Json
 @inject HttpClient Http;
 @inject NavigationManager navigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
 
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-        </tr>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Date Posted</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in listingList ?? new Listing[0])
-        {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.Price</td>
-                <td>@item.Description</td>
-            </tr>
-        }
+    @foreach (var item in listingList ?? new Listing[0])
+    {
+        <tr>
+            <td>@item.Title</td>
+            <td>@item.Price</td>
+            <td>@item.Description</td>
+            <td>@item.DatePosted.DayOfWeek</td>
+        </tr>
+    }
     </tbody>
 </table>
 
@@ -29,54 +33,80 @@
 
 <ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
 
-<EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="col-md-12 mb-3">
-        <label for="Title">Title</label>
-        <InputText id="Title" @bind-Value="listingItem.Title" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="Price">Price</label>
-        <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="Status">Status</label>
-        <InputText id="Status" @bind-Value="listingItem.Status" class="form-control" />
-    </div>
-    <div class="col-md-12 mb-3">
-        <label for="Description">Description</label>
-        <InputText id="Description" @bind-Value="listingItem.Description" class="form-control" />
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="Category">Category</label>
-        <InputText id="Category" @bind-Value="listingItem.Category" class="form-control" />
-    </div>
+    <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="col-md-12 mb-3">
+            <label for="Title">Title</label>
+            <InputText id="Title" @bind-Value="listingItem.Title" class="form-control"/>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Price">Price</label>
+            <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control"/>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Status">Status</label>
+            <InputSelect id="Status" @bind-Value="listingItem.Status" class="form-control">
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+                <option value="Sold">Sold</option>
+            </InputSelect>
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="Description">Description</label>
+            <InputText id="Description" @bind-Value="listingItem.Description" class="form-control"/>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Category">Category</label>
+            <InputSelect id="Category" @bind-Value="listingItem.Category" class="form-control">
+                <option value="Elektronik" >Elektronik</option>
+                <option value="Clothing">Tøj</option>
+                <option value="Books">Bøger</option>
+            </InputSelect>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Location">Location</label>
+            <InputSelect id="Location" @bind-Value="_selectedLocationIndex" class="form-control">
+                @foreach (var location in _locations)
+                {
+                    <option value="@_locations.IndexOf(location)">@location.Name</option>
+                }
+            </InputSelect>
+        </div>
 
 
-    <div class="col-12 mb-3">
-        <button type="submit" class="btn btn-primary">Add</button>
-    </div>
-</EditForm>
+        <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </EditForm>
 
 </ModalDialog>
 
 @code {
-    private Listing[]? listingList = new Listing[0];
     private string serverUrl = "https://localhost:7231";
 
-    protected override async Task OnInitializedAsync()
-    {
-        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
-    }
+    private User? user;
+
+    private Listing[]? listingList = new Listing[0];
 
     private Listing listingItem = new Listing();
 
     private EditContext? aEditContext;
 
-    protected override void OnInitialized()
+    private List<Location> _locations = new();
+    private int _selectedLocationIndex;
+
+    protected override async Task OnInitializedAsync()
     {
         aEditContext = new EditContext(listingItem);
+        var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
+        if (!string.IsNullOrEmpty(userInfoJson))
+        {
+            user = JsonSerializer.Deserialize<User>(userInfoJson);
+        }
+
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
     }
 
     public async Task HandleValidSubmit()
@@ -84,11 +114,13 @@
         await AddListingItem();
         addDialog.Close();
         listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
-
     }
 
     private async Task AddListingItem()
     {
+        listingItem.User = user;
+        listingItem.DatePosted = DateTime.Now;
+        listingItem.Location = _locations[_selectedLocationIndex];
         await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
         listingItem = new(); // clear fields in form

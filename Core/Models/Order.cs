@@ -5,7 +5,9 @@ namespace Core.Models;
 
 public class Order
 {
+    [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
+    [BsonElement("_id")]
     public string Id { get; set; }
     
     public DateTime OrderDate { get; set; }
