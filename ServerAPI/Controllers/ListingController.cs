@@ -45,5 +45,12 @@ namespace ServerAPI.Controllers
             return lRepo.SortListingsByUserId(userId);
         }
 
+        [HttpDelete]
+        [Route("deletebyid")]
+        public void DeleteGetAllListingId([FromQuery] string listingId)
+        {
+             lRepo.DeleteListing(listingId);
+        }
+
     }
 }

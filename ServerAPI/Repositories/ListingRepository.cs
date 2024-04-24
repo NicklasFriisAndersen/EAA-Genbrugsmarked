@@ -46,8 +46,14 @@ namespace ServerAPI.Repositories
         {
             var filter = Builders<Listing>.Filter.Eq("User.Id", userId);
             return collection.Find(filter).ToList();
-
         }
+
+        public void DeleteListing(string listingId)
+        {
+            var filter = Builders<Listing>.Filter.Eq("Id", listingId);
+            collection.DeleteOne(filter);
+        }
+
     }
 }
 

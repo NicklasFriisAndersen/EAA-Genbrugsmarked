@@ -14,6 +14,8 @@ namespace ServerAPI.Repositories
 
         public List<Listing> SortListingsByUserId(string userId);
 
+        public void DeleteListing(string listingId);
+
     }
 }
 
