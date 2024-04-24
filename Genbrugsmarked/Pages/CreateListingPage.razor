@@ -7,6 +7,12 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
+
+<div>
+    <button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
+</div>
+
+
 <div>
 <InputSelect @bind-Value="selectedCategory" class="form-control">
     <option value="Elektronik" >Elektronik</option>
@@ -14,6 +20,7 @@
     <option value="Books">Books</option>
 </InputSelect>
 </div>
+
 
 <div class="col-12 mb-3"> 
     <button class="btn btn-primary" @onclick="FilterByCategory">Søg</button> 
@@ -43,7 +50,7 @@
     </tbody>
 </table>
 
-<button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
+
 
 <ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
 
@@ -89,9 +96,6 @@
         </div>
 
 
-        <div class="col-12 mb-3">
-            <button type="submit" class="btn btn-primary">Add</button>
-        </div>
         
     
     </EditForm>
