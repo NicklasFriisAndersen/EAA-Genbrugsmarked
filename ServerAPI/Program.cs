@@ -14,6 +14,7 @@ public class Program
 
 
         builder.Services.AddSingleton<ILoginRepository, LoginRepository>();
+        builder.Services.AddSingleton<ILocationRepository, LocationRepository>();
 
         builder.Services.AddCors(options =>
         {
