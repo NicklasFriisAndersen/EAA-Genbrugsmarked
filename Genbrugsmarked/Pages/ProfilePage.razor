@@ -15,9 +15,6 @@
     {
         <p id="role-display-if-admin">Special Role: @user.Role</p>
     }
-    <div class="col-12 mb-3">
-        <button class="btn btn-primary" @onclick="FilterByUserId">Søg</button>
-    </div>
 }
 else
 {
@@ -61,10 +58,8 @@ else
             user = JsonSerializer.Deserialize<User>(userInfoJson);
         }
 
-        //string test = "nicklas";
-        //var url = $"{serverUrl}/api/listing/getbyusername?username={test}";
-        //listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        //StateHasChanged();
+        await FilterByUserId();
+
         Console.WriteLine(user.Username);
     }
 
