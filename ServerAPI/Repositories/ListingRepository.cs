@@ -42,6 +42,11 @@ namespace ServerAPI.Repositories
             return collection.Find<Listing>(item => item.Category.Equals(cname,StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
+        public List<Listing> SortListingsByLocation(string locationName)
+        {
+            return collection.Find<Listing>(item => item.Location.Name.Equals(locationName, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
         public List<Listing> SortListingsByUserId(string userId)
         {
             var filter = Builders<Listing>.Filter.Eq("User.Id", userId);

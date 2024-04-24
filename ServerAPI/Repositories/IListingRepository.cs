@@ -12,6 +12,8 @@ namespace ServerAPI.Repositories
 
         public List<Listing> SortListingsByCategory(string cname);
 
+        public List<Listing> SortListingsByLocation(string locationName);
+
         public List<Listing> SortListingsByUserId(string userId);
 
         public void DeleteListing(string listingId);

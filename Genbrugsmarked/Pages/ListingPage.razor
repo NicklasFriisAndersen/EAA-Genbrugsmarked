@@ -7,16 +7,33 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
-<div class="col-md-6 mb-3">
-<InputSelect @bind-Value="selectedCategory" class="form-control">
-    <option value="Elektronik" >Elektronik</option>
-    <option value="Clothing">Clothing</option>
-    <option value="Books">Books</option>
-</InputSelect>
+
+<div>
+    <div class="col-md-3 mb-3">
+        <InputSelect @bind-Value="selectedCategory" class="form-control">
+            test
+            <option value="Elektronik">Elektronik</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Books">Books</option>
+        </InputSelect>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <InputSelect id="Location" @bind-Value="selectedLocation" class="form-control">
+            @foreach (var location in _locations)
+            {
+                <option value="@location.Name">@location.Name</option>
+            }
+        </InputSelect>
+    </div>
 </div>
 
-<div class="col-12 mb-3"> 
-    <button class="btn btn-primary" @onclick="FilterByCategory">Søg</button> 
+<div class="col-3 mb-3">
+    <button class="btn btn-primary" @onclick="FilterByCategory">Filter by Category</button>
+</div>
+
+<div class="col-3 mb-3">
+    <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
 </div>
 
 <table class="table table-striped">
@@ -50,15 +67,15 @@
 <ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
 
     <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator/>
-        <ValidationSummary/>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <div class="col-md-12 mb-3">
             <label for="Title">Title</label>
-            <InputText id="Title" @bind-Value="listingItem.Title" class="form-control"/>
+            <InputText id="Title" @bind-Value="listingItem.Title" class="form-control" />
         </div>
         <div class="col-md-6 mb-3">
             <label for="Price">Price</label>
-            <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control"/>
+            <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control" />
         </div>
         <div class="col-md-6 mb-3">
             <label for="Status">Status</label>
@@ -70,12 +87,12 @@
         </div>
         <div class="col-md-12 mb-3">
             <label for="Description">Description</label>
-            <InputText id="Description" @bind-Value="listingItem.Description" class="form-control"/>
+            <InputText id="Description" @bind-Value="listingItem.Description" class="form-control" />
         </div>
         <div class="col-md-6 mb-3">
             <label for="Category">Category</label>
             <InputSelect id="Category" @bind-Value="listingItem.Category" class="form-control">
-                <option value="Elektronik" >Elektronik</option>
+                <option value="Elektronik">Elektronik</option>
                 <option value="Clothing">Tøj</option>
                 <option value="Books">Bøger</option>
             </InputSelect>
@@ -94,8 +111,8 @@
         <div class="col-12 mb-3">
             <button type="submit" class="btn btn-primary">Add</button>
         </div>
-        
-    
+
+
     </EditForm>
 
 </ModalDialog>
@@ -105,7 +122,9 @@
 
     private User? user;
 
-    string selectedCategory = "";
+    string selectedCategory = "Electronics";
+
+    string selectedLocation = "Lokale 1";
 
     private Listing[]? listingList = new Listing[0];
 
@@ -153,7 +172,13 @@
         var url = $"{serverUrl}/api/listing/getbyfilter?category={selectedCategory}";
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
-   
+    }
+
+    private async Task FilterByLocation()
+    {
+        var url = $"{serverUrl}/api/listing/getbylocation?location={selectedLocation}";
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        StateHasChanged();
     }
 
 }
