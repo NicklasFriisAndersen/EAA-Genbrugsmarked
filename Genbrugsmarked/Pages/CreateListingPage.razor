@@ -7,12 +7,18 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
+<div>
 <InputSelect @bind-Value="selectedCategory" class="form-control">
     <option value="Elektronik" >Elektronik</option>
     <option value="Clothing">Clothing</option>
     <option value="Books">Books</option>
 </InputSelect>
-<button class="btn-primary" @onclick="FilterByCategory">Søg</button>
+</div>
+
+<div class="col-12 mb-3"> 
+    <button class="btn btn-primary" @onclick="FilterByCategory">Søg</button> 
+</div>
+
 <table class="table table-striped">
     <thead>
     <tr>
