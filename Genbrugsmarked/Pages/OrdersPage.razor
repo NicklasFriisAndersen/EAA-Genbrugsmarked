@@ -1,8 +1,50 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@using Core.Models;
+@using System.Text.Json
+@inject HttpClient Http;
+@using System.Net
 @page "/orders"
 <h3>Orders</h3>
-
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Seller</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Date Posted</th>
+        <th>Kategori</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Orderlist ?? new Order[0])
+    {
+        <tr>
+            <td>@item.User.Username</td>
+            <td>@item.OrderDate</td>
+            <td>@item.Listings</td>
+            
+        </tr>
+    }
+    </tbody>
+</table>
 @code {
+    private string serverUrl = "https://localhost:7231";
     
+    private User? user;
+    
+    private Order[]? Orderlist = new Order[0];
+
+    private Order OrderItem = new Order();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
+        if (!string.IsNullOrEmpty(userInfoJson))
+        {
+            user = JsonSerializer.Deserialize<User>(userInfoJson);
+        }
+        Orderlist = await Http.GetFromJsonAsync<Order[]>($"{serverUrl}/api/order/getall");
+
+    }
     
 }
