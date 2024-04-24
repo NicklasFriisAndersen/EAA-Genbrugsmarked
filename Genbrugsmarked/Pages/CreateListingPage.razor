@@ -1,11 +1,23 @@
 @page "/listing"
 @using Core.Models;
 @using System.Text.Json
+@using MongoDB.Driver.Core.Operations
 @inject HttpClient Http;
 @inject NavigationManager navigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
+<div>
+<InputSelect @bind-Value="selectedCategory" class="form-control">
+    <option value="Elektronik" >Elektronik</option>
+    <option value="Clothing">Clothing</option>
+    <option value="Books">Books</option>
+</InputSelect>
+</div>
+
+<div class="col-12 mb-3"> 
+    <button class="btn btn-primary" @onclick="FilterByCategory">Søg</button> 
+</div>
 
 <table class="table table-striped">
     <thead>
@@ -14,6 +26,7 @@
         <th>Price</th>
         <th>Description</th>
         <th>Date Posted</th>
+        <th>Kategori</th>
     </tr>
     </thead>
     <tbody>
@@ -24,6 +37,7 @@
             <td>@item.Price</td>
             <td>@item.Description</td>
             <td>@item.DatePosted.DayOfWeek</td>
+            <td>@item.Category</td>
         </tr>
     }
     </tbody>
@@ -78,6 +92,8 @@
         <div class="col-12 mb-3">
             <button type="submit" class="btn btn-primary">Add</button>
         </div>
+        
+    
     </EditForm>
 
 </ModalDialog>
@@ -86,6 +102,8 @@
     private string serverUrl = "https://localhost:7231";
 
     private User? user;
+
+    string selectedCategory = "";
 
     private Listing[]? listingList = new Listing[0];
 
@@ -127,5 +145,13 @@
     }
 
     private ModalDialog? addDialog { get; set; }
+
+    private async Task FilterByCategory()
+    {
+        var url = $"{serverUrl}/api/listing/getbyfilter?category={selectedCategory}";
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        StateHasChanged();
+   
+    }
 
 }

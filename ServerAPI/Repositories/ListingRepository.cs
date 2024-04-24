@@ -36,6 +36,11 @@ namespace ServerAPI.Repositories
 
             return collection.Find(filter).ToList();
         }
+
+        public List<Listing> SortListingsByCategory(string cname)
+        {   
+            return collection.Find<Listing>(item => item.Category.Equals(cname,StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 }
 
