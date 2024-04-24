@@ -9,7 +9,8 @@ namespace ServerAPI.Controllers
 	[Route("api/order")]
 	public class OrderController : ControllerBase
 	{
-		private IOrderRepository _orderRepository;
+	private IOrderRepository _orderRepository;
+
 	public OrderController(IOrderRepository orderRepository)
 	{
 		_orderRepository = orderRepository;
