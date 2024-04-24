@@ -39,6 +39,13 @@ namespace ServerAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getbylocation")]
+        public IEnumerable<Listing> GetAllFromLocation([FromQuery] string location)
+        {
+            return lRepo.SortListingsByLocation(location);
+        }
+
+        [HttpGet]
         [Route("getbyuserid")]
         public IEnumerable<Listing> GetAllByUserId([FromQuery] string userId)
         {
