@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using ServerAPI.Repositories;
 
@@ -20,4 +21,12 @@ public class LocationController : ControllerBase
 		var locations = _locationRepository.SendLocations();
 		return Ok(locations);
 	}
+
+	[HttpGet]
+	[Route("getbyfilter")]
+	public IEnumerable<Location> GetLocations([FromQuery] string location)
+	{
+		return _locationRepository.SortListingsByLocation(location);
+	}
+	
 }

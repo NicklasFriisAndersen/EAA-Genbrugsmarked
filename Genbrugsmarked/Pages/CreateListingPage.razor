@@ -7,16 +7,25 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <h3>Listings</h3>
-<div class="col-md-6 mb-3">
+<div class="col-md-4 mb-3">
 <InputSelect @bind-Value="selectedCategory" class="form-control">
     <option value="Elektronik" >Elektronik</option>
     <option value="Clothing">Clothing</option>
     <option value="Books">Books</option>
 </InputSelect>
 </div>
+<div class="col-md-4 mb-3">
+<InputSelect @bind-Value="selectedLocation" class="form-control">
+    
+</InputSelect>
+</div>
 
 <div class="col-12 mb-3"> 
     <button class="btn btn-primary" @onclick="FilterByCategory">Søg</button> 
+</div>
+
+<div class="col-12 mb-3"> 
+    <button class="btn btn-primary" @onclick="FilterByLocation">Søg</button> 
 </div>
 
 <table class="table table-striped">
@@ -26,7 +35,8 @@
         <th>Price</th>
         <th>Description</th>
         <th>Date Posted</th>
-        <th>Kategori</th>
+        <th>Category</th>
+        <th>Location</th>
     </tr>
     </thead>
     <tbody>
@@ -38,6 +48,7 @@
             <td>@item.Description</td>
             <td>@item.DatePosted.DayOfWeek</td>
             <td>@item.Category</td>
+            <td>@item.Location</td>
         </tr>
     }
     </tbody>
@@ -105,6 +116,8 @@
 
     string selectedCategory = "";
 
+    string selectedLocation = "";
+
     private Listing[]? listingList = new Listing[0];
 
     private Listing listingItem = new Listing();
@@ -152,6 +165,13 @@
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
    
+    }
+
+    private async Task FilterByLocation()
+    {
+        var url = $"{serverUrl}/api/location/getbyfilter?location={selectedLocation}";
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        StateHasChanged();
     }
 
 }

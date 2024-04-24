@@ -29,5 +29,12 @@ namespace ServerAPI.Repositories
             var filter = Builders<Location>.Filter.Empty;
             return collection.Find(filter).ToList();
         }
+
+        public List<Location> SortListingsByLocation(string lname)
+        {
+            return collection.Find<Location>(location => location.Name.Equals(lname,StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        
     }
 }
