@@ -36,9 +36,9 @@ namespace ServerAPI.Repositories
 			return collection.Find(filter).ToList();
 		}
 
-        public List<Listing> SortListingsByUserId(string userId)
+        public List<Order> sortOrderByUserId(string userId)
         {
-            var filter = Builders<Listing>.Filter.Eq("User.Id", userId);
+            var filter = Builders<Order>.Filter.Eq("User.Id", userId);
             return collection.Find(filter).ToList();
         }
     }

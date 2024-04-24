@@ -8,7 +8,7 @@ public interface IOrderRepository
     
     public List<Order> getAllOrders();
 
-    public List<Order> SortOrdersByUserId(string userId);
+    public List<Order> sortOrderByUserId(string userId);
 
 
 }
