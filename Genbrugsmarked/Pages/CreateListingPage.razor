@@ -16,7 +16,10 @@
 </div>
 <div class="col-md-4 mb-3">
 <InputSelect @bind-Value="selectedLocation" class="form-control">
-    
+    @foreach (var location in _locations)
+        {
+            <option value="@location.Name">@location.Name</option>
+        }
 </InputSelect>
 </div>
 
@@ -48,7 +51,7 @@
             <td>@item.Description</td>
             <td>@item.DatePosted.DayOfWeek</td>
             <td>@item.Category</td>
-            <td>@item.Location</td>
+            <td>@item.Location?.Name</td>
         </tr>
     }
     </tbody>
