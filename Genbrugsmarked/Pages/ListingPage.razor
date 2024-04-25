@@ -209,6 +209,7 @@
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
         listingItem = new(); // clear fields in form
     }
+    
 
     private ModalDialog? addDialog { get; set; }
 
@@ -241,34 +242,10 @@
 
         await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
         Console.WriteLine();
+        navigationManager.NavigateTo("/orders");
     }
-
-    //private async Task ConfirmPurchase()
-    //{
-    //    var order = new Order
-    //    {
-    //        User = user,
-    //        Listings = new List<Listing> { currentListing },
-    //        OrderDate = DateTime.UtcNow
-    //    };
-    //    Console.WriteLine("Order data being sent:", JsonSerializer.Serialize(order));
-
-    //    var response = await Http.PostAsJsonAsync($"{serverUrl}/api/order/add", order);
-
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        Console.WriteLine("Order successfully placed");
-    //        purchaseDialog.Close();
-    //        // Optionally, refresh the orders list or navigate the user
-    //        navigationManager.NavigateTo("/orders");
-
-
-
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine("Failed to place order");
-    //    }
-    //}
+    
+    
+    
 
 }
