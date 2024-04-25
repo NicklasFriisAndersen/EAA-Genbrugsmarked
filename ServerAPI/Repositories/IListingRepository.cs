@@ -16,6 +16,10 @@ namespace ServerAPI.Repositories
 
         public List<Listing> SortListingsByUserId(string userId);
 
+        public List<Listing> SortListingByPriceDescending(decimal price);
+        
+        public List<Listing> SortListingByPriceAscending(decimal price);
+
         public void DeleteListing(string listingId);
 
     }
