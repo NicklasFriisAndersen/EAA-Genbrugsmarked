@@ -175,14 +175,11 @@
     private Listing listingItem = new Listing();
 
     private Order orderItem = new Order();
-
-<<<<<<< HEAD
-=======
+    
     private bool isAscending = true;
     
     private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)";
     
->>>>>>> origin/Pricesortbranch
     private Listing? currentListing;
 
     private ModalDialog? purchaseDialog;
@@ -271,10 +268,6 @@
         navigationManager.NavigateTo("/orders");
     }
     
-<<<<<<< HEAD
-    
-    
-=======
     private void ToggleSortOrder()
     {
         isAscending = !isAscending;
@@ -316,6 +309,5 @@
     //        Console.WriteLine("Failed to place order");
     //    }
     //}
->>>>>>> origin/Pricesortbranch
 
 }
