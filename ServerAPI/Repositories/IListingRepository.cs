@@ -22,6 +22,8 @@ namespace ServerAPI.Repositories
 
         public void DeleteListing(string listingId);
 
-    }
+        public void UpdateListing (Listing listing);
+
+	}
 }
 

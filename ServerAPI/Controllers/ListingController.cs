@@ -73,5 +73,13 @@ namespace ServerAPI.Controllers
             return lRepo.SortListingByPriceAscending(price);
         }
 
+        [HttpPost]
+        [Route("update")]
+        public void UpdateOne(Listing listing)
+        {
+            lRepo.UpdateListing(listing);
+        }
+        
+        
     }
 }

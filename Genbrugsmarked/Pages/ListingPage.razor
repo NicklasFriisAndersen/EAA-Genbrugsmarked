@@ -222,6 +222,7 @@
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
         listingItem = new(); // clear fields in form
     }
+    
 
     private ModalDialog? addDialog { get; set; }
 
@@ -268,6 +269,7 @@
 
         await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
         Console.WriteLine();
+        navigationManager.NavigateTo("/orders");
     }
     
     private void ToggleSortOrder()
