@@ -8,64 +8,61 @@
 
 <h3>Listings</h3>
 
-<div>
-    <div class="col-md-3 mb-3">
+<div class="row">
+    <div class="col-md-2 mb-3">
         <InputSelect @bind-Value="selectedCategory" class="form-control">
             <option value="Elektronik">Electronics</option>
             <option value="Clothing">Clothing</option>
             <option value="Books">Books</option>
         </InputSelect>
     </div>
-    <div class="col-3 mb-3">
+    <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="FilterByCategory">Filter by Category</button>
     </div>
-
-    <div class="col-md-3 mb-3">
-        <InputSelect id="Location" @bind-Value="selectedLocation" class="form-control">
+    <div class="col-md-2 mb-3">
+        <InputSelect @bind-Value="selectedLocation" class="form-control">
             @foreach (var location in _locations)
             {
                 <option value="@location.Name">@location.Name</option>
             }
         </InputSelect>
     </div>
-
-    <div class="col-3 mb-3">
+    <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
+    </div>
+    <div class="col-md-2 mb-3">
+        <button class="btn btn-primary" @onclick="ToggleSortOrder">@ButtonLabel</button>
+    </div>
+    <div class="col-md-2 mb-3">
+        <button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
     </div>
 </div>
 
-  <div>
-    <button class="btn btn-primary" @onclick="ToggleSortOrder">
-        @ButtonLabel
-    </button>
- </div> 
- <br />
-<div> <button class="btn btn-secondary" @onclick="() => resetFilters()">Reset filters</button></div>
-
+<br />
 
 <table class="table table-striped">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Date Posted</th>
-        <th>Category</th>
-        <th>Purchase</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Date Posted</th>
+            <th>Category</th>
+            <th>Purchase</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var item in listingList ?? new Listing[0])
-    {
-        <tr>
-            <td>@item.Title</td>
-            <td>@item.Price</td>
-            <td>@item.Description</td>
-            <td>@item.DatePosted.ToString("yyyy-MM-dd")</td>
-            <td>@item.Category</td>
-            <td><button class="btn btn-primary" @onclick="() => OpenPurchaseDialog(item)">Purchase</button></td>
-        </tr>
-    }
+        @foreach (var item in listingList ?? new Listing[0])
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+                <td>@item.DatePosted.ToString("yyyy-MM-dd")</td>
+                <td>@item.Category</td>
+                <td><button class="btn btn-primary" @onclick="() => OpenPurchaseDialog(item)">Purchase</button></td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -271,7 +268,10 @@
         Console.WriteLine(currentListing.Title);
         orderItem.User = user;
         orderItem.Listings = currentListing;
+        orderItem.Listings.Status = "Unavailable";
         orderItem.OrderDate = DateTime.Now;
+        
+        await Http.PostAsJsonAsync($"{serverUrl}/api/listing/update", currentListing);
 
         await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
         Console.WriteLine();
