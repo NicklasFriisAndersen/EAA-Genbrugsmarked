@@ -52,17 +52,7 @@ namespace ServerAPI.Repositories
             var filter = Builders<Listing>.Filter.Eq("User.Id", userId);
             return collection.Find(filter).ToList();
         }
-        
-        public List<Listing> SortListingByPriceDescending(decimal price)
-        {
-            return collection.Aggregate().SortByDescending<Listing>(listing => listing.Price).ToList();
-        }
-        
-        public List<Listing> SortListingByPriceAscending(decimal price)
-        {
-            return collection.Aggregate().SortBy<Listing>(listing => listing.Price).ToList();
-        }
-        
+
         public void DeleteListing(string listingId)
         {
             var filter = Builders<Listing>.Filter.Eq("Id", listingId);

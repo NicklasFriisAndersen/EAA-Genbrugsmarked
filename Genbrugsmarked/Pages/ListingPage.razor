@@ -36,14 +36,6 @@
     <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
 </div>
 
-<div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByPriceDescending">Filter by Price</button>
-</div>
-
-<div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByPriceAscending">Filter by Price</button>
-</div>
-
 <table class="table table-striped">
     <thead>
     <tr>
@@ -178,6 +170,7 @@
 
     private Order orderItem = new Order();
 
+
     private Listing? currentListing;
 
     private ModalDialog? purchaseDialog;
@@ -230,20 +223,6 @@
     private async Task FilterByLocation()
     {
         var url = $"{serverUrl}/api/listing/getbylocation?location={selectedLocation}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
-    }
-    
-    private async Task FilterByPriceDescending()
-    {
-        var url = $"{serverUrl}/api/listing/getbypricedescending?location={selectedLocation}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
-    }
-    
-    private async Task FilterByPriceAscending()
-    {
-        var url = $"{serverUrl}/api/listing/getbypriceascending?location={selectedLocation}";
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
     }
