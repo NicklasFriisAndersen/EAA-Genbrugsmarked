@@ -58,6 +58,20 @@ namespace ServerAPI.Controllers
         {
              lRepo.DeleteListing(listingId);
         }
+        
+        [HttpGet]
+        [Route("getbypricedescending")]
+        public IEnumerable<Listing> GetAllByPriceDescending([FromQuery] decimal price)
+        {
+            return lRepo.SortListingByPriceDescending(price);
+        }
+        
+        [HttpGet]
+        [Route("getbypriceascending")]
+        public IEnumerable<Listing> GetAllByPriceAscending([FromQuery] decimal price)
+        {
+            return lRepo.SortListingByPriceAscending(price);
+        }
 
     }
 }
