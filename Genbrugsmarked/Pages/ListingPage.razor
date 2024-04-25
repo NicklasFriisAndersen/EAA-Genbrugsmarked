@@ -37,11 +37,9 @@
 </div>
 
 <div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByPriceDescending">Filter by Price</button>
-</div>
-
-<div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByPriceAscending">Filter by Price</button>
+    <button class="btn btn-primary" @onclick="ToggleSortOrder">
+        @ButtonLabel
+    </button>
 </div>
 
 <table class="table table-striped">
@@ -178,7 +176,10 @@
 
     private Order orderItem = new Order();
 
-
+    private bool isAscending = true;
+    
+    private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)";
+    
     private Listing? currentListing;
 
     private ModalDialog? purchaseDialog;
@@ -263,6 +264,20 @@
 
         await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
         Console.WriteLine();
+    }
+    
+    private void ToggleSortOrder()
+    {
+        isAscending = !isAscending;
+        
+        if (isAscending)
+        {
+            FilterByPriceAscending();
+        }
+        else
+        {
+            FilterByPriceDescending();
+        }
     }
 
     //private async Task ConfirmPurchase()
