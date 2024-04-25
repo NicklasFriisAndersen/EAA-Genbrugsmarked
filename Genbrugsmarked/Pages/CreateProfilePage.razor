@@ -48,5 +48,6 @@
         await Http.PostAsJsonAsync<User>($"{serverUrl}/api/user/add", userItem);
         Console.WriteLine("Klient: add " + userItem.Username + " " + userItem.Email);
         userItem = new(); // clear fields in form
+        navigationManager.NavigateTo("/login");
     }
 }
