@@ -58,19 +58,6 @@ namespace ServerAPI.Repositories
             var filter = Builders<Listing>.Filter.Eq("Id", listingId);
             collection.DeleteOne(filter);
         }
-        
-        public void UpdateListing (Listing listing)
-        {
-            var filter = Builders<Listing>.Filter.Eq("Id", listing.Id);
-            var update = Builders<Listing>.Update
-                .Set(l => l.Category, listing.Category)
-                .Set(l => l.Title, listing.Title)
-                .Set(l => l.Description, listing.Description)
-                .Set(l => l.Status, listing.Status)
-                .Set(l => l.Price, listing.Price)
-                .Set(l => l.Location, listing.Location);
-            collection.UpdateOne(filter, update);
-        }
 
     }
 }

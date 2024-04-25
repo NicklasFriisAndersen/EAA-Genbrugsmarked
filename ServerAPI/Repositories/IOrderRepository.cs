@@ -11,6 +11,4 @@ public interface IOrderRepository
     public List<Order> sortOrderByUserId(string userId);
 
 
-    
-    public void DeleteOrder(string OrderId);
 }

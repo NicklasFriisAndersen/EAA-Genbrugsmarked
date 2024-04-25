@@ -9,10 +9,10 @@
     <thead>
     <tr>
         <th>Seller</th>
-        <th>Date of purchase</th>
-        <th>Listing details</th>
-        <th>Remove from orders</th>
-        
+        <th>Price</th>
+        <th>Description</th>
+        <th>Date Posted</th>
+        <th>Kategori</th>
     </tr>
     </thead>
     <tbody>
@@ -21,50 +21,12 @@
         <tr>
             <td>@item.Listings.User.Username</td>
             <td>@item.OrderDate</td>
-            <td><button class="btn btn-primary" @onclick="() => OpenOrderDialog(item.Listings)">See details</button></td>
-            <td><button @onclick="() => DeleteOrder(item)">Delete</button></td>
+            <td>@item.Listings</td>
+            
         </tr>
     }
     </tbody>
 </table>
-
-<ModalDialog @ref="@OrderDialog" Title="Confirm Purchase">
-    <div class="row p-3">
-        <div class="col-md-12 mb-3">
-                    <strong>Title:</strong>
-                    <p>@currentOrderListing?.Title</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Price:</strong>
-                    <p>@currentOrderListing?.Price.ToString()</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Description:</strong>
-                    <p>@currentOrderListing?.Description</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Date Posted:</strong>
-                    <p>@currentOrderListing?.DatePosted.ToString("yyyy-MM-dd")</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Category:</strong>
-                    <p>@currentOrderListing?.Category</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Status:</strong>
-                    <p>@currentOrderListing?.Status</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Location:</strong>
-                    <p>@currentOrderListing?.Location?.Name</p>
-                </div>
-        <div class="col-12 mb-3">
-            
-            <button class="btn btn-secondary" @onclick="() => OrderDialog.Close()">Close</button>
-        </div>
-    </div>
-</ModalDialog>
-
 @code {
     private string serverUrl = "https://localhost:7231";
 
@@ -73,11 +35,7 @@
     private Order[]? Orderlist = new Order[0];
 
     private Order OrderItem = new Order();
-    
-    private Listing? currentOrderListing;
-    
-    private ModalDialog? OrderDialog;
-    
+
     protected override async Task OnInitializedAsync()
     {
         var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
@@ -96,17 +54,4 @@
         StateHasChanged();
     }
 
-    private void OpenOrderDialog(Listing listing)
-    {
-        currentOrderListing = listing;
-        OrderDialog.Open();
-    }
-    
-    private async Task DeleteOrder(Order order)
-    {
-        await Http.DeleteAsync($"{serverUrl}/api/order/deletebyid?orderId={order.Id}");
-        StateHasChanged();
-       // await FilterByUserId();
-    }
-    
 }

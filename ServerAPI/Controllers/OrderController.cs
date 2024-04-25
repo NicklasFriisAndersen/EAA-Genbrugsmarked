@@ -23,7 +23,12 @@ namespace ServerAPI.Controllers
 			_orderRepository.insertOneOrder(order);
 		}
 	
-		
+		[HttpGet]
+		[Route("getall")]
+		public IEnumerable<Order> GetAll()
+		{
+			return _orderRepository.getAllOrders();
+		}
 
         [HttpGet]
         [Route("getbyuserid")]
@@ -32,19 +37,5 @@ namespace ServerAPI.Controllers
             return _orderRepository.sortOrderByUserId(userId);
         }
     }
-	[HttpGet]
-	[Route("getall")]
-	public IEnumerable<Order> GetAll()
-	{
-		return _orderRepository.getAllOrders();
-	}
-	
-	[HttpDelete]
-	[Route("deletebyid")]
-	public void DeleteGetAllOrderId([FromQuery] string OrderId)
-	{
-		_orderRepository.DeleteOrder(OrderId);
-	}
-	}
 }
 
