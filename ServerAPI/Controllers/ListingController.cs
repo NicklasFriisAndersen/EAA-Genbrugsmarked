@@ -79,7 +79,13 @@ namespace ServerAPI.Controllers
         {
             lRepo.UpdateListing(listing);
         }
-        
-        
+
+        [HttpGet]
+        [Route("getbystatus")]
+        public IEnumerable<Listing> GetByStatus([FromQuery] string status)
+        {
+            return lRepo.SortListingsByStatus(status);
+        }
+
     }
 }

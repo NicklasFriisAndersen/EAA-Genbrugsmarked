@@ -24,6 +24,9 @@ namespace ServerAPI.Repositories
 
         public void UpdateListing (Listing listing);
 
-	}
+        public List<Listing> SortListingsByStatus(string status);
+
+
+    }
 }
 

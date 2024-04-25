@@ -181,9 +181,9 @@
     private Order orderItem = new Order();
 
     private bool isAscending = true;
-    
+
     private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)";
-    
+
     private Listing? currentListing;
 
     private ModalDialog? purchaseDialog;
@@ -202,7 +202,8 @@
             user = JsonSerializer.Deserialize<User>(userInfoJson);
         }
 
-        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        await FilterByStatus();
+        //listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
         _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
     }
 
@@ -222,7 +223,7 @@
         Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
         listingItem = new(); // clear fields in form
     }
-    
+
 
     private ModalDialog? addDialog { get; set; }
 
@@ -239,14 +240,22 @@
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
     }
-    
+
+    private async Task FilterByStatus()
+    {
+        string standardStatus = "Available";
+        var url = $"{serverUrl}/api/listing/getbystatus?status={standardStatus}";
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
+        StateHasChanged();
+    }
+
     private async Task FilterByPriceDescending()
     {
         var url = $"{serverUrl}/api/listing/getbypricedescending?location={selectedLocation}";
         listingList = await Http.GetFromJsonAsync<Listing[]>(url);
         StateHasChanged();
     }
-    
+
     private async Task FilterByPriceAscending()
     {
         var url = $"{serverUrl}/api/listing/getbypriceascending?location={selectedLocation}";
@@ -271,11 +280,11 @@
         Console.WriteLine();
         navigationManager.NavigateTo("/orders");
     }
-    
+
     private void ToggleSortOrder()
     {
         isAscending = !isAscending;
-        
+
         if (isAscending)
         {
             FilterByPriceAscending();
