@@ -34,8 +34,8 @@ And remember to log in!
 </div>
 
 <div>
-<img src="Images/RdeKors_08_05_222420_kopi_1500x450.jpg" alt="billede" class="billede" />
-</div
+    <img src="Images/RdeKors_08_05_222420_kopi_1500x450.jpg" alt="billede" class="billede" />
+</div>
 
 @code {
     private string serverUrl = "https://localhost:7231";
@@ -50,3 +50,4 @@ And remember to log in!
         _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
     }
 }
+
