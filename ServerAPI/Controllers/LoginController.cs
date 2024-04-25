@@ -21,7 +21,7 @@ public class LoginController : ControllerBase
         {
             if (_loginRepository.Verify(username, password))
             {
-               // return Ok(new { Message = "Login successful" });
+               
                 var user = _loginRepository.GetUserByUserName(username);
                 return Ok(user.ToJson());
             }
