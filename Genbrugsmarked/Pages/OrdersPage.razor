@@ -29,13 +29,13 @@
 </table>
 @code {
     private string serverUrl = "https://localhost:7231";
-    
+
     private User? user;
-    
+
     private Order[]? Orderlist = new Order[0];
 
     private Order OrderItem = new Order();
-    
+
     protected override async Task OnInitializedAsync()
     {
         var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
@@ -43,8 +43,15 @@
         {
             user = JsonSerializer.Deserialize<User>(userInfoJson);
         }
-        Orderlist = await Http.GetFromJsonAsync<Order[]>($"{serverUrl}/api/order/getall");
-
+        //Orderlist = await Http.GetFromJsonAsync<Order[]>($"{serverUrl}/api/order/getall");
+        FilterByUserId();
     }
-    
+
+    private async Task FilterByUserId()
+    {
+        var url = $"{serverUrl}/api/order/getbyuserid?userId={user.Id}";
+        Orderlist = await Http.GetFromJsonAsync<Order[]>(url);
+        StateHasChanged();
+    }
+
 }

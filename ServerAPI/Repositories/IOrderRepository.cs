@@ -7,4 +7,8 @@ public interface IOrderRepository
     public void insertOneOrder(Order order);
     
     public List<Order> getAllOrders();
+
+    public List<Order> sortOrderByUserId(string userId);
+
+
 }
