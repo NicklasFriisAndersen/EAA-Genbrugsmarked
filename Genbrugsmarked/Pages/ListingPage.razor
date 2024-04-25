@@ -38,6 +38,8 @@
     </div>
 </div>
 
+<div class="btn btn-secondary" @onclick="resetFilters">Reset filters</div>
+
 <br />
 
 <table class="table table-striped">
@@ -166,7 +168,7 @@
 
     string selectedCategory = "Electronics";
 
-    string selectedLocation = "Lokale 1";
+    string selectedLocation = "A01.12";
 
     private Listing[]? listingList = new Listing[0];
 
@@ -294,8 +296,8 @@
 
     private async Task resetFilters()
     {
-        string selectecCategory = "";
-        string selectedLocation = "";
+        string selectecCategory = "Electronics";
+        string selectedLocation = "A01.12";
 
         listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
 
