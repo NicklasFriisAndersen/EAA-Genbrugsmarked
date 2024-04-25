@@ -59,5 +59,13 @@ namespace ServerAPI.Controllers
              lRepo.DeleteListing(listingId);
         }
 
+        [HttpPost]
+        [Route("update")]
+        public void UpdateOne(Listing listing)
+        {
+            lRepo.UpdateListing(listing);
+        }
+        
+        
     }
 }
