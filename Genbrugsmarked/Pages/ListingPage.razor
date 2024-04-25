@@ -17,6 +17,9 @@
             <option value="Books">Books</option>
         </InputSelect>
     </div>
+    <div class="col-3 mb-3">
+        <button class="btn btn-primary" @onclick="FilterByCategory">Filter by Category</button>
+    </div>
 
     <div class="col-md-3 mb-3">
         <InputSelect id="Location" @bind-Value="selectedLocation" class="form-control">
@@ -26,15 +29,16 @@
             }
         </InputSelect>
     </div>
+
+    <div class="col-3 mb-3">
+        <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
+    </div>
+
 </div>
 
-<div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByCategory">Filter by Category</button>
-</div>
+<div> <button class="btn btn-secondary" @onclick="() => resetFilters()">Reset filters</button></div>
 
-<div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
-</div>
+
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -68,7 +72,7 @@
             <td>@item.Title</td>
             <td>@item.Price</td>
             <td>@item.Description</td>
-            <td>@item.DatePosted.DayOfWeek</td>
+            <td>@item.DatePosted.ToString("yyyy-MM-dd")</td>
             <td>@item.Category</td>
             <td><button class="btn btn-primary" @onclick="() => OpenPurchaseDialog(item)">Purchase</button></td>
         </tr>
@@ -257,6 +261,15 @@
         Console.WriteLine();
     }
 
+    private async Task resetFilters()
+    {
+        string selectecCategory = "";
+        string selectedLocation = "";
+
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+
+        StateHasChanged();
+    }
     //private async Task ConfirmPurchase()
     //{
     //    var order = new Order
