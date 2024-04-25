@@ -1,47 +1,67 @@
-@page "/listing"
-@using Core.Models;
-@using System.Text.Json
-@using MongoDB.Driver.Core.Operations
-@inject HttpClient Http;
-@inject NavigationManager navigationManager
-@inject Blazored.LocalStorage.ILocalStorageService localStore
+@page "/listing";  
+@using Core.Models;  
+@using System.Text.Json;  
+@using MongoDB.Driver.Core.Operations; 
+@inject HttpClient Http;  
+@inject NavigationManager navigationManager; 
+@inject Blazored.LocalStorage.ILocalStorageService localStore; 
 
-<h3>Listings</h3>
+<!--Defines a route for this page in the Blazor app -->
+<!-- Includes the core model classes for use in this file -->
+<!-- Includes JSON utilities for serialization and deserialization -->
+<!-- Includes core MongoDB operations -->
+<!-- Dependency injection for HttpClient -->
+<!-- Dependency injection for managing navigation -->
+<!-- Dependency injection for local storage service -->
 
+
+
+<h3>Listings</h3>  <!-- Header for the listings page -->
+
+<!-- Start of the row containing filters and action buttons -->
 <div class="row">
+    <!-- Category filter dropdown -->
     <div class="col-md-2 mb-3">
         <InputSelect @bind-Value="selectedCategory" class="form-control">
+            <!-- Dropdown options for categories -->
             <option value="Electronics">Electronics</option>
             <option value="Clothing">Clothing</option>
             <option value="Books">Books</option>
         </InputSelect>
     </div>
+    <!-- Button to apply the category filter -->
     <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="FilterByCategory">Filter by Category</button>
     </div>
+    <!-- Location filter dropdown -->
     <div class="col-md-2 mb-3">
         <InputSelect @bind-Value="selectedLocation" class="form-control">
+            <!-- Dynamically generating options for locations from _locations -->
             @foreach (var location in _locations)
             {
                 <option value="@location.Name">@location.Name</option>
             }
         </InputSelect>
     </div>
+    <!-- Button to apply the location filter -->
     <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
     </div>
+    <!-- Button to toggle the sort order of the listings -->
     <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="ToggleSortOrder">@ButtonLabel</button>
     </div>
+    <!-- Button to open a dialog to add a new item -->
     <div class="col-md-2 mb-3">
         <button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
     </div>
 </div>
 
-<div class="btn btn-secondary" @onclick="resetFilters">Reset filters</div>
+<button class="btn btn-secondary" @onclick="resetFilters">Reset filters</button>
 
 <br />
 
+<!-- Table to display listings -->
 <table class="table table-striped">
     <thead>
         <tr>
@@ -54,6 +74,7 @@
         </tr>
     </thead>
     <tbody>
+        <!-- Loop through listingList and populate the table with listings -->                 <!-- Button to initiate a purchase -->
         @foreach (var item in listingList ?? new Listing[0])
         {
             <tr>
@@ -68,39 +89,42 @@
     </tbody>
 </table>
 
+<!-- Another button to open the dialog to add a new item -->
+<button class="btn btn-primary" @onclick="() => addDialog.Open()">Add Item</button>
 
-
-<!-- Purchase Modal Dialog -->
-<ModalDialog @ref="@purchaseDialog" Title="Confirm Purchase">
+<!-- Modal dialog to confirm a purchase -->
+<ModalDialog @ref="purchaseDialog" Title="Confirm Purchase">
     <div class="row p-3">
+        <!-- Displaying details of the current listing selected for purchase -->
         <div class="col-md-12 mb-3">
-                    <strong>Title:</strong>
-                    <p>@currentListing?.Title</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Price:</strong>
-                    <p>@currentListing?.Price.ToString()</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Description:</strong>
-                    <p>@currentListing?.Description</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Date Posted:</strong>
-                    <p>@currentListing?.DatePosted.ToString("yyyy-MM-dd")</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Category:</strong>
-                    <p>@currentListing?.Category</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Status:</strong>
-                    <p>@currentListing?.Status</p>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <strong>Location:</strong>
-                    <p>@currentListing?.Location?.Name</p>
-                </div>
+            <strong>Title:</strong>
+            <p>@currentListing?.Title</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Price:</strong>
+            <p>@currentListing?.Price.ToString()</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Description:</strong>
+            <p>@currentListing?.Description</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Date Posted:</strong>
+            <p>@currentListing?.DatePosted.ToString("yyyy-MM-dd")</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Category:</strong>
+            <p>@currentListing?.Category</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Status:</strong>
+            <p>@currentListing?.Status</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <strong>Location:</strong>
+            <p>@currentListing?.Location?.Name</p>
+        </div>
+        
         <div class="col-12 mb-3">
             <button class="btn btn-success" @onclick="ConfirmPurchase">Confirm My Purchase</button>
             <button class="btn btn-secondary" @onclick="() => purchaseDialog.Close()">Cancel</button>
@@ -108,19 +132,27 @@
     </div>
 </ModalDialog>
 
-<ModalDialog @ref="@addDialog" Title="Add Item to shoppinglist">
-
+<!-- Modal dialog for adding an item to the shopping list -->
+<ModalDialog @ref="@addDialog" Title="Add Item to shopping list">
+    
+    <!-- Form with validation and handling for submitting the form -->
     <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <DataAnnotationsValidator />  <!-- Enables validation based on data annotations in your model -->
+        <ValidationSummary />  <!-- Displays a summary of validation errors -->
+
+        <!-- Input field for the title of the item -->
         <div class="col-md-12 mb-3">
             <label for="Title">Title</label>
             <InputText id="Title" @bind-Value="listingItem.Title" class="form-control" />
         </div>
+
+        <!-- Input field for the price of the item -->
         <div class="col-md-6 mb-3">
             <label for="Price">Price</label>
             <InputNumber id="Price" @bind-Value="listingItem.Price" class="form-control" />
         </div>
+
+        <!-- Dropdown for selecting the status of the item -->
         <div class="col-md-6 mb-3">
             <label for="Status">Status</label>
             <InputSelect id="Status" @bind-Value="listingItem.Status" class="form-control">
@@ -129,10 +161,14 @@
                 <option value="Sold">Sold</option>
             </InputSelect>
         </div>
+
+        <!-- Text input field for the description of the item -->
         <div class="col-md-12 mb-3">
             <label for="Description">Description</label>
             <InputText id="Description" @bind-Value="listingItem.Description" class="form-control" />
         </div>
+
+        <!-- Dropdown for selecting the category of the item -->
         <div class="col-md-6 mb-3">
             <label for="Category">Category</label>
             <InputSelect id="Category" @bind-Value="listingItem.Category" class="form-control">
@@ -141,166 +177,179 @@
                 <option value="Books">Books</option>
             </InputSelect>
         </div>
+
+        <!-- Dropdown for selecting the location of the item, with dynamic options generated from available locations -->
         <div class="col-md-6 mb-3">
             <label for="Location">Location</label>
             <InputSelect id="Location" @bind-Value="_selectedLocationIndex" class="form-control">
-                @foreach (var location in _locations)
+                <!-- Loop to generate options for each location -->
+                @foreach (var location in _locations) 
                 {
                     <option value="@_locations.IndexOf(location)">@location.Name</option>
                 }
             </InputSelect>
         </div>
 
-
+        <!-- Button to submit the form and add the new item -->
         <div class="col-12 mb-3">
             <button type="submit" class="btn btn-primary">Add</button>
         </div>
 
-
     </EditForm>
-
 </ModalDialog>
 
 @code {
-    private string serverUrl = "https://localhost:7231";
+    private string serverUrl = "https://localhost:7231"; // Base URL for server requests
 
-    private User? user;
+    private User? user; // User object, potentially nullable
 
-    string selectedCategory = "Electronics";
+    string selectedCategory = "Electronics"; // Default selected category for filtering listings
 
-    string selectedLocation = "A01.12";
+    string selectedLocation = "A01.12"; // Default selected location for filtering listings
 
-    private Listing[]? listingList = new Listing[0];
+    private Listing[]? listingList = new Listing[0]; // Array of listings, initially empty
 
-    private Listing listingItem = new Listing();
+    private Listing listingItem = new Listing(); // Single listing item for adding to the list
 
-    private Order orderItem = new Order();
+    private Order orderItem = new Order(); // Order item to hold the purchase info
 
-    private bool isAscending = true;
+    private bool isAscending = true; // Boolean to toggle sort order of listings
 
-    private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)";
+    private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)"; // Dynamic button label based on sort order
 
-    private Listing? currentListing;
+    private Listing? currentListing; // Currently selected listing for detailed view or purchase
 
-    private ModalDialog? purchaseDialog;
+    private ModalDialog? purchaseDialog; // Reference to the purchase modal dialog
 
-    private EditContext? aEditContext;
+    private EditContext? aEditContext; // Edit context for data validation
 
-    private List<Location> _locations = new();
-    private int _selectedLocationIndex;
+    private List<Location> _locations = new(); // List of locations for filtering
+    private int _selectedLocationIndex; // Index of the selected location in _locations
 
+    // Runs once component is initialized
     protected override async Task OnInitializedAsync()
     {
-        aEditContext = new EditContext(listingItem);
-        var userInfoJson = await localStore.GetItemAsStringAsync("userinfo");
+        aEditContext = new EditContext(listingItem); // Set up edit context for form validation
+        var userInfoJson = await localStore.GetItemAsStringAsync("userinfo"); // Retrieve user info from local storage
         if (!string.IsNullOrEmpty(userInfoJson))
         {
-            user = JsonSerializer.Deserialize<User>(userInfoJson);
+            user = JsonSerializer.Deserialize<User>(userInfoJson); // Deserialize user info if not null
         }
 
-        await FilterByStatus();
-        //listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
-        _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
+        await FilterByStatus(); // Filter listings by status on initialization
+                                // Uncomment to fetch all listings on initialization
+                                //listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations"); // Fetch locations
     }
 
+    // Handles valid submissions of the listing form
     public async Task HandleValidSubmit()
     {
-        await AddListingItem();
-        addDialog.Close();
-        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        await AddListingItem(); // Add listing item
+        addDialog.Close(); // Close the add dialog
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall"); // Refresh listing after addition
     }
 
+    // Adds a listing item to the database
     private async Task AddListingItem()
     {
-        listingItem.User = user;
-        listingItem.DatePosted = DateTime.Now;
-        listingItem.Location = _locations[_selectedLocationIndex];
-        await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem);
-        Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price);
-        listingItem = new(); // clear fields in form
+        listingItem.User = user; // Set the user of the listing
+        listingItem.DatePosted = DateTime.Now; // Set the current date as date posted
+        listingItem.Location = _locations[_selectedLocationIndex]; // Set the location based on selected index
+        await Http.PostAsJsonAsync<Listing>($"{serverUrl}/api/listing/add", listingItem); // Post the listing to the server
+        Console.WriteLine("Klient: add " + listingItem.Title + " " + listingItem.Price); // Log to console
+        listingItem = new(); // Reset the listing item
     }
 
+    private ModalDialog? addDialog { get; set; } // Reference to the add item modal dialog
 
-    private ModalDialog? addDialog { get; set; }
-
+    // Filters listings by selected category
     private async Task FilterByCategory()
     {
-        var url = $"{serverUrl}/api/listing/getbyfilter?category={selectedCategory}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
+        var url = $"{serverUrl}/api/listing/getbyfilter?category={selectedCategory}"; // Construct URL with query
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url); // Fetch filtered listings
+        StateHasChanged(); // Notify Blazor state has changed
     }
 
+    // Filters listings by selected location
     private async Task FilterByLocation()
     {
-        var url = $"{serverUrl}/api/listing/getbylocation?location={selectedLocation}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
+        var url = $"{serverUrl}/api/listing/getbylocation?location={selectedLocation}"; // Construct URL with query
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url); // Fetch filtered listings
+        StateHasChanged(); // Notify Blazor state has changed
     }
 
+    // Filters listings by availability status
     private async Task FilterByStatus()
     {
-        string standardStatus = "Available";
-        var url = $"{serverUrl}/api/listing/getbystatus?status={standardStatus}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
+        string standardStatus = "Available"; // Default status for filtering
+        var url = $"{serverUrl}/api/listing/getbystatus?status={standardStatus}"; // Construct URL with query
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url); // Fetch filtered listings
+        StateHasChanged(); // Notify Blazor state has changed
     }
 
+    // Filters listings by price in descending order
     private async Task FilterByPriceDescending()
     {
-        var url = $"{serverUrl}/api/listing/getbypricedescending?location={selectedLocation}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
+        var url = $"{serverUrl}/api/listing/getbypricedescending?location={selectedLocation}"; // Construct URL with query
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url); // Fetch filtered listings
+        StateHasChanged(); // Notify Blazor state has changed
     }
 
+    // Filters listings by price in ascending order
     private async Task FilterByPriceAscending()
     {
-        var url = $"{serverUrl}/api/listing/getbypriceascending?location={selectedLocation}";
-        listingList = await Http.GetFromJsonAsync<Listing[]>(url);
-        StateHasChanged();
+        var url = $"{serverUrl}/api/listing/getbypriceascending?location={selectedLocation}"; // Construct URL with query
+        listingList = await Http.GetFromJsonAsync<Listing[]>(url); // Fetch filtered listings
+        StateHasChanged(); // Notify Blazor state has changed
     }
 
+    // Opens the purchase dialog for a specific listing
     private void OpenPurchaseDialog(Listing listing)
     {
-        currentListing = listing;
-        purchaseDialog.Open();
+        currentListing = listing; // Set the current listing
+        purchaseDialog.Open(); // Open the purchase dialog
     }
 
+    // Confirms the purchase and updates the listing status
     private async Task ConfirmPurchase()
     {
-        Console.WriteLine(currentListing.Title);
-        orderItem.User = user;
-        orderItem.Listings = currentListing;
-        orderItem.Listings.Status = "Unavailable";
-        orderItem.OrderDate = DateTime.Now;
-        
-        await Http.PostAsJsonAsync($"{serverUrl}/api/listing/update", currentListing);
+        Console.WriteLine(currentListing.Title); // Log the title of purchased listing
+        orderItem.User = user; // Set the user of the order
+        orderItem.Listings = currentListing; // Add the listing to the order
+        orderItem.Listings.Status = "Unavailable"; // Update status to 'Unavailable'
+        orderItem.OrderDate = DateTime.Now; // Set the order date to now
 
-        await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem);
-        Console.WriteLine();
-        navigationManager.NavigateTo("/orders");
+        await Http.PostAsJsonAsync($"{serverUrl}/api/listing/update", currentListing); // Post the updated listing
+
+        await Http.PostAsJsonAsync<Order>($"{serverUrl}/api/order/add", orderItem); // Add the order
+        Console.WriteLine(); // Log to console
+        navigationManager.NavigateTo("/orders"); // Navigate to the orders page
     }
 
+    // Toggles the sorting order of the listings
     private void ToggleSortOrder()
     {
-        isAscending = !isAscending;
+        isAscending = !isAscending; // Toggle the boolean value
 
         if (isAscending)
         {
-            FilterByPriceAscending();
+            FilterByPriceAscending(); // Filter by ascending price
         }
         else
         {
-            FilterByPriceDescending();
+            FilterByPriceDescending(); // Filter by descending price
         }
     }
 
+    // Resets all filters to default and fetches all listings
     private async Task resetFilters()
     {
-        string selectecCategory = "Electronics";
-        string selectedLocation = "A01.12";
+        selectedCategory = "Electronics"; // Reset category filter
+        selectedLocation = "A01.12"; // Reset location filter
 
-        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall"); // Fetch all listings
 
-        StateHasChanged();
+        StateHasChanged(); // Notify Blazor state has changed
     }
 }

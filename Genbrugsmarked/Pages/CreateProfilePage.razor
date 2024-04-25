@@ -5,22 +5,29 @@
 
 <h3>Create User</h3>
 
+<!-- Form setup for creating a user with validation and submission handling -->
 <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+    <DataAnnotationsValidator />  <!-- Enables validation based on data annotations within the User model -->
+    <ValidationSummary />  <!-- Displays a summary of all validation errors -->
+    <!-- Username input field -->
     <div class="col-md-12 mb-3">
         <label for="Username">Username</label>
         <InputText id="Username" @bind-Value="userItem.Username" class="form-control" />
     </div>
+
+    <!-- Password input field -->
     <div class="col-md-6 mb-3">
         <label for="Password">Password</label>
         <InputText id="Password" @bind-Value="userItem.Password" class="form-control" />
     </div>
+
+    <!-- Email input field -->
     <div class="col-md-6 mb-3">
         <label for="Email">Email</label>
         <InputText id="Email" @bind-Value="userItem.Email" class="form-control" />
     </div>
 
+    <!-- Button to submit the form and create the account -->
     <div class="col-12 mb-3">
         <button type="submit" class="btn btn-primary">Create Account</button>
     </div>
@@ -28,26 +35,34 @@
 
 @code {
     private EditContext? aEditContext;
-
+      <!-- EditContext for managing form data validation -->
     private string serverUrl = "https://localhost:7231";
-
+      <!-- Server URL for API calls -->
     private User userItem = new User();
-
+      <!-- New instance of User to bind to form for data entry -->
+    // Initialization method to set up the EditContext with the userItem when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         aEditContext = new EditContext(userItem);
     }
 
+    // Method called when the form is submitted and passes validation
     public async Task HandleValidSubmit()
     {
         await AddListingItem();
+          <!-- Call to add the user item to the database -->
     }
 
+    // Sends the userItem to the API to be added to the database and navigates to the login page
     private async Task AddListingItem()
     {
         await Http.PostAsJsonAsync<User>($"{serverUrl}/api/user/add", userItem);
+          <!-- HTTP POST request to add the user -->
         Console.WriteLine("Klient: add " + userItem.Username + " " + userItem.Email);
-        userItem = new(); // clear fields in form
+          <!-- Console log for debugging -->
+        userItem = new();
+          <!-- Clear the form fields after submission -->
         navigationManager.NavigateTo("/login");
+          <!-- Redirect to the login page -->
     }
 }
