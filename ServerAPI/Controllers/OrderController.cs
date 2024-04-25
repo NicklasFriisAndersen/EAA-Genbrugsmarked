@@ -31,7 +31,7 @@ namespace ServerAPI.Controllers
         {
             return _orderRepository.sortOrderByUserId(userId);
         }
-    
+    }
 	[HttpGet]
 	[Route("getall")]
 	public IEnumerable<Order> GetAll()
