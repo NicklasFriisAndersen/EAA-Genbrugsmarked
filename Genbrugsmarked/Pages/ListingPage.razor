@@ -37,9 +37,11 @@
 </div>
 
 <div class="col-3 mb-3">
-    <button class="btn btn-primary" @onclick="ToggleSortOrder">
-        @ButtonLabel
-    </button>
+    <button class="btn btn-primary" @onclick="FilterByPriceDescending">Filter by Price</button>
+</div>
+
+<div class="col-3 mb-3">
+    <button class="btn btn-primary" @onclick="FilterByPriceAscending">Filter by Price</button>
 </div>
 
 <table class="table table-striped">
@@ -176,13 +178,6 @@
 
     private Order orderItem = new Order();
 
-<<<<<<< HEAD
-=======
-    private bool isAscending = true;
-    
-    private string ButtonLabel => isAscending ? "Sort by Price (Ascending)" : "Sort by Price (Descending)";
-    
->>>>>>> origin/Pricesortbranch
     private Listing? currentListing;
 
     private ModalDialog? purchaseDialog;
@@ -271,51 +266,7 @@
         navigationManager.NavigateTo("/orders");
     }
     
-<<<<<<< HEAD
     
     
-=======
-    private void ToggleSortOrder()
-    {
-        isAscending = !isAscending;
-        
-        if (isAscending)
-        {
-            FilterByPriceAscending();
-        }
-        else
-        {
-            FilterByPriceDescending();
-        }
-    }
-
-    //private async Task ConfirmPurchase()
-    //{
-    //    var order = new Order
-    //    {
-    //        User = user,
-    //        Listings = new List<Listing> { currentListing },
-    //        OrderDate = DateTime.UtcNow
-    //    };
-    //    Console.WriteLine("Order data being sent:", JsonSerializer.Serialize(order));
-
-    //    var response = await Http.PostAsJsonAsync($"{serverUrl}/api/order/add", order);
-
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        Console.WriteLine("Order successfully placed");
-    //        purchaseDialog.Close();
-    //        // Optionally, refresh the orders list or navigate the user
-    //        navigationManager.NavigateTo("/orders");
-
-
-
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine("Failed to place order");
-    //    }
-    //}
->>>>>>> origin/Pricesortbranch
 
 }
