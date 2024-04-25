@@ -36,6 +36,39 @@ namespace ServerAPI.Repositories
 
             return collection.Find(filter).ToList();
         }
+
+        public List<Listing> SortListingsByCategory(string cname)
+        {   
+            return collection.Find<Listing>(item => item.Category.Equals(cname,StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public List<Listing> SortListingsByLocation(string locationName)
+        {
+            return collection.Find<Listing>(item => item.Location.Name.Equals(locationName, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public List<Listing> SortListingsByUserId(string userId)
+        {
+            var filter = Builders<Listing>.Filter.Eq("User.Id", userId);
+            return collection.Find(filter).ToList();
+        }
+        
+        public List<Listing> SortListingByPriceDescending(decimal price)
+        {
+            return collection.Aggregate().SortByDescending<Listing>(listing => listing.Price).ToList();
+        }
+        
+        public List<Listing> SortListingByPriceAscending(decimal price)
+        {
+            return collection.Aggregate().SortBy<Listing>(listing => listing.Price).ToList();
+        }
+        
+        public void DeleteListing(string listingId)
+        {
+            var filter = Builders<Listing>.Filter.Eq("Id", listingId);
+            collection.DeleteOne(filter);
+        }
+
     }
 }
 

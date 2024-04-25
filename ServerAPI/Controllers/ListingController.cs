@@ -31,6 +31,47 @@ namespace ServerAPI.Controllers
             return lRepo.getAllItems();
         }
 
+        [HttpGet]
+        [Route("getbyfilter")]
+        public IEnumerable<Listing> GetAll([FromQuery] string category)
+        {
+            return lRepo.SortListingsByCategory(category);
+        }
+
+        [HttpGet]
+        [Route("getbylocation")]
+        public IEnumerable<Listing> GetAllFromLocation([FromQuery] string location)
+        {
+            return lRepo.SortListingsByLocation(location);
+        }
+
+        [HttpGet]
+        [Route("getbyuserid")]
+        public IEnumerable<Listing> GetAllByUserId([FromQuery] string userId)
+        {
+            return lRepo.SortListingsByUserId(userId);
+        }
+
+        [HttpDelete]
+        [Route("deletebyid")]
+        public void DeleteGetAllListingId([FromQuery] string listingId)
+        {
+             lRepo.DeleteListing(listingId);
+        }
+        
+        [HttpGet]
+        [Route("getbypricedescending")]
+        public IEnumerable<Listing> GetAllByPriceDescending([FromQuery] decimal price)
+        {
+            return lRepo.SortListingByPriceDescending(price);
+        }
+        
+        [HttpGet]
+        [Route("getbypriceascending")]
+        public IEnumerable<Listing> GetAllByPriceAscending([FromQuery] decimal price)
+        {
+            return lRepo.SortListingByPriceAscending(price);
+        }
+
     }
 }
-

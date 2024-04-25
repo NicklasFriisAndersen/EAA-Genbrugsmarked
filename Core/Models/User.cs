@@ -19,7 +19,5 @@ public class User
 
     public string Role { get; set; } = "Buyer";
     
-    public List<Order>? Orders { get; set; }
     
-    public List<Listing>? Listings { get; set; }
 }

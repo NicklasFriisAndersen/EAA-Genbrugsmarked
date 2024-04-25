@@ -5,12 +5,14 @@ namespace Core.Models;
 
 public class Order
 {
+    [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    [BsonElement("_id")]
+    public string? Id { get; set; }
     
     public DateTime OrderDate { get; set; }
     
-    public User User { get; set; }
+    public User? User { get; set; }
 
-    public List<Listing> Listings { get; set; }
+    public Listing? Listings { get; set; }
 }

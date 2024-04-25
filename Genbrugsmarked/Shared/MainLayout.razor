@@ -15,16 +15,18 @@
         @if (user == null)
         {
             <div class="top-row px-4">
+                <img src="Images/LogoGrey.png" alt="Logo" class="logo">
                 <a href="https://localhost:7033/login">Login</a>
             </div>
         }
         else
         {
-            <div class="top-row px-4">
-                <a href="#" @onclick="ClearLocalStorage">Sign out</a>
-            </div>
+    <div class="top-row px-4">
+        <img src="Images/LogoGrey.png" alt="Logo" class="logo">
+        <a href="#" @onclick="ClearLocalStorage">Sign out</a>
+    </div>
         }
-            
+
         <article class="content px-4">
             @Body
         </article>
