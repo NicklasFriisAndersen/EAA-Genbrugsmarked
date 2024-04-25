@@ -11,8 +11,7 @@
 <div>
     <div class="col-md-3 mb-3">
         <InputSelect @bind-Value="selectedCategory" class="form-control">
-            test
-            <option value="Elektronik">Elektronik</option>
+            <option value="Elektronik">Electronics</option>
             <option value="Clothing">Clothing</option>
             <option value="Books">Books</option>
         </InputSelect>
@@ -33,18 +32,16 @@
     <div class="col-3 mb-3">
         <button class="btn btn-primary" @onclick="FilterByLocation">Filter by Location</button>
     </div>
-
 </div>
 
-<div> <button class="btn btn-secondary" @onclick="() => resetFilters()">Reset filters</button></div>
-
-
-
-<div class="col-3 mb-3">
+  <div>
     <button class="btn btn-primary" @onclick="ToggleSortOrder">
         @ButtonLabel
     </button>
-</div>
+ </div> 
+ <br />
+<div> <button class="btn btn-secondary" @onclick="() => resetFilters()">Reset filters</button></div>
+
 
 <table class="table table-striped">
     <thead>
@@ -304,32 +301,4 @@
 
         StateHasChanged();
     }
-    //private async Task ConfirmPurchase()
-    //{
-    //    var order = new Order
-    //    {
-    //        User = user,
-    //        Listings = new List<Listing> { currentListing },
-    //        OrderDate = DateTime.UtcNow
-    //    };
-    //    Console.WriteLine("Order data being sent:", JsonSerializer.Serialize(order));
-
-    //    var response = await Http.PostAsJsonAsync($"{serverUrl}/api/order/add", order);
-
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        Console.WriteLine("Order successfully placed");
-    //        purchaseDialog.Close();
-    //        // Optionally, refresh the orders list or navigate the user
-    //        navigationManager.NavigateTo("/orders");
-
-
-
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine("Failed to place order");
-    //    }
-    //}
-
 }
