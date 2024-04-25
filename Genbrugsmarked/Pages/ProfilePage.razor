@@ -14,6 +14,7 @@
     if (user.Role == "Admin")
     {
         <p id="role-display-if-admin">Special Role: @user.Role</p>
+        <p id="role-display-if-admin">As an Admin you should mark the listing as "Sold" when it is picked up</p>
     }
 }
 else
@@ -23,25 +24,25 @@ else
 
 <table class="table table-striped">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var item in listingList ?? new Listing[0])
-    {
-        <tr>
-            <td>@item.Title</td>
-            <td>@item.Price</td>
-            <td>@item.Description</td>
-            <td><button @onclick="() => EditItem(item)">Edit</button></td>
-            <td><button @onclick="() => DeleteListing(item)">Delete</button></td>
-        </tr>
-    }
+        @foreach (var item in listingList ?? new Listing[0])
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+                <td><button @onclick="() => EditItem(item)">Edit</button></td>
+                <td><button @onclick="() => DeleteListing(item)">Delete</button></td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -103,16 +104,16 @@ else
     private User? user;
     private Listing[]? listingList = new Listing[0];
     private string serverUrl = "https://localhost:7231";
-    
+
     private ModalDialog? UpdateDialog { get; set; }
 
     private Listing? currentListing = new Listing();
-    
+
     private int _selectedLocationIndex;
 
     private List<Location> _locations = new();
-    
-  //  private EditContext? aEditContext;
+
+    //  private EditContext? aEditContext;
     protected override async Task OnInitializedAsync()
     {
         _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
@@ -144,7 +145,7 @@ else
     {
         currentListing = item;
         _selectedLocationIndex = _locations.IndexOf(currentListing.Location);
-       // aEditContext = new EditContext(currentListing);
+        // aEditContext = new EditContext(currentListing);
         UpdateDialog.Open();
     }
 
@@ -162,7 +163,7 @@ else
         UpdateDialog.Close();
         await FilterByUserId();
     }
-    
-    
+
+
 
 }
