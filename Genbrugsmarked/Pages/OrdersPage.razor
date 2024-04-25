@@ -10,7 +10,8 @@
     <tr>
         <th>Seller</th>
         <th>Date of purchase</th>
-        <th>Bought listing details</th>
+        <th>Listing details</th>
+        <th>Remove from orders</th>
         
     </tr>
     </thead>
@@ -21,6 +22,7 @@
             <td>@item.Listings.User.Username</td>
             <td>@item.OrderDate</td>
             <td><button class="btn btn-primary" @onclick="() => OpenOrderDialog(item.Listings)">See details</button></td>
+            <td><button @onclick="() => DeleteOrder(item)">Delete</button></td>
         </tr>
     }
     </tbody>
@@ -90,6 +92,13 @@
     {
         currentOrderListing = listing;
         OrderDialog.Open();
+    }
+    
+    private async Task DeleteOrder(Order order)
+    {
+        await Http.DeleteAsync($"{serverUrl}/api/order/deletebyid?orderId={order.Id}");
+        StateHasChanged();
+       // await FilterByUserId();
     }
     
 }

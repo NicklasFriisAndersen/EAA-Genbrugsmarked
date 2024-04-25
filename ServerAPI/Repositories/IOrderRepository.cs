@@ -7,4 +7,6 @@ public interface IOrderRepository
     public void insertOneOrder(Order order);
     
     public List<Order> getAllOrders();
+    
+    public void DeleteOrder(string OrderId);
 }

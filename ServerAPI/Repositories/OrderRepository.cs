@@ -35,6 +35,13 @@ namespace ServerAPI.Repositories
 
 		return collection.Find(filter).ToList();
 	}
+	
+	public void DeleteOrder(string orderId)
+	{
+		var filter = Builders<Order>.Filter.Eq("Id", orderId);
+		collection.DeleteOne(filter);
+	}
+	
 	}
 }
 

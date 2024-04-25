@@ -29,6 +29,13 @@ namespace ServerAPI.Controllers
 	{
 		return _orderRepository.getAllOrders();
 	}
+	
+	[HttpDelete]
+	[Route("deletebyid")]
+	public void DeleteGetAllOrderId([FromQuery] string OrderId)
+	{
+		_orderRepository.DeleteOrder(OrderId);
+	}
 	}
 }
 
