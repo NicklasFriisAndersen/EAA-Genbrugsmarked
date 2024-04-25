@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Core.Models;
+@inject HttpClient Http;
 
 <PageTitle>Eaaa Genbrugsmarked</PageTitle>
 
@@ -8,3 +10,42 @@ Vælg i menuen til venstre.
 
 Og husk at logge ind!
 
+<br />
+<br />
+
+<h3>Our Locations</h3>
+
+<br />
+
+<div class="row">
+    @foreach (var location in _locations)
+    {
+        <div class="col-md-4">
+            <div class="locationlist">
+                <div class="locationlist-body">
+                    <h5 class="locationlist-title">@location.Name</h5>
+                    <h5 class="locationlist-openinghours">Open between @location.OpeningHours</h5>
+                    <p class="locationlist-text">@location.Description</p>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@code {
+    private string serverUrl = "https://localhost:7231";
+
+    private List<Location> _locations = new();
+    private int _selectedLocationIndex;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        _locations = await Http.GetFromJsonAsync<List<Location>>($"{serverUrl}/api/location/getAllLocations");
+    }
+}
