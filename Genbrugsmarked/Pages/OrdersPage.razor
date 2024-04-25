@@ -106,7 +106,7 @@
     {
         await Http.DeleteAsync($"{serverUrl}/api/order/deletebyid?orderId={order.Id}");
         StateHasChanged();
-       // await FilterByUserId();
+        await FilterByUserId();
     }
     
 }
