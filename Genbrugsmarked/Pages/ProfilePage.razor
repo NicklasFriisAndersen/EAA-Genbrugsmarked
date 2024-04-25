@@ -58,9 +58,14 @@ else
             user = JsonSerializer.Deserialize<User>(userInfoJson);
         }
 
-        await FilterByUserId();
-
-        Console.WriteLine(user.Username);
+        if (user.Role == "Admin")
+        {
+            listingList = await Http.GetFromJsonAsync<Listing[]>($"{serverUrl}/api/listing/getall");
+        }
+        else
+        {
+            await FilterByUserId();
+        }
     }
 
     private async Task FilterByUserId()
@@ -81,5 +86,4 @@ else
         StateHasChanged();
         await FilterByUserId();
     }
-
 }
